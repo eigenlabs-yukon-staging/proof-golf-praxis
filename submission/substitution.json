@@ -1,9 +1,153 @@
 {
-  "format": "paper-dag-substitution/1",
-  "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
-  "title": "Baseline: the paper as published, nothing removed, nothing added",
-  "remove": [],
-  "add": [],
-  "edges": [],
-  "discharge": []
+ "format": "paper-dag-substitution/1",
+ "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
+ "title": "Slice; heavy-stacks glue reduced to its packing clause; rank bound, generic bound and search range without clauses no proof uses",
+ "remove": [
+  "lem:we-hiding",
+  "lem:rank-one",
+  "prop:hs-dimension",
+  "ext:hs",
+  "lem:gp-rank",
+  "lem:ledger",
+  "lem:range",
+  "lem:heavy"
+ ],
+ "add": [
+  {
+   "id": "new:gp-rank",
+   "kind": "lemma",
+   "label": "Lemma 4.5'",
+   "name": "Rank bound, inequality only",
+   "statement": "For every stack $\\mathbf{W} = (W_c)_{c \\in C}$:\n\n \n(a) $\\operatorname{gp}(\\mathbf{W}) \\le g^{-\\operatorname{rank} \\mathbf{W}}$;\n(b) $\\operatorname{gp}(v^\\top) \\ge \\operatorname{gp}(\\mathbf{W})$ for every $v$ in the row space of $\\mathbf{W}$.",
+   "proof": "(a) Let $M$ be the matrix of all rows of all $W_c$, of rank $d := \\operatorname{rank} \\mathbf{W}$, and fix $u$. Choose $d$ linearly independent columns of $M$, column $0$ among them unless it is zero. Given the entries of $r$ at the other indices in $[N]$, at most one value modulo $q$ of its entries at the chosen indices solves $M r = u$. Each of the independent entries $r_1, \\dots, r_N$ takes a given value modulo $q$ with probability at most $1/g$, as $g + 1 < q$; so does $r_0$ given all of them. Hence $\\Pr[M r = u] \\le g^{-d}$, as in Odlyzko's lemma \\cite[Lemma 3.1]{NW22}.\n(b) Write $v = \\sum_c W_c^\\top z_c$. Then $v^\\top r = \\sum_c z_c^\\top W_c r$ is a function of $(W_c r)_c$, so it takes one value whenever $(W_c r)_c$ takes its likeliest value, and $\\operatorname{gp}(v^\\top) \\ge \\operatorname{gp}(\\mathbf{W})$.",
+   "group": "A",
+   "explain": "A stack of rank d is guessed with probability at most g^(-d), and a vector of its row space is at least as easy to guess as the stack."
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma B.2'",
+   "name": "Generic bound",
+   "statement": "$E$ is a polynomial of degree two in $u$ with nonnegative coefficients. If $E(2) \\le 2^{-\\lambda}$ and $E(2^{\\lambda+1}) - E(2) \\le 1 - 2^{-\\lambda}$, then $E(2Q + 2) \\le (Q+1)/2^\\lambda$ for every integer $0 \\le Q < 2^\\lambda$.",
+   "proof": "Every term of $E(u)$ is a polynomial in $u$ with nonnegative coefficients, as $L \\ge 1$, of degree two for $N_{\\mathrm{cmp}}(u)$ and at most two otherwise. So $Q \\mapsto E(2Q+2) - (Q+1)/2^\\lambda$ is convex; by the premises it is at most $0$ at $Q = 0$ and at $Q = 2^\\lambda - 1$, where it is $E(2^{\\lambda+1}) - 1$, hence in between.",
+   "explain": "The budget E(u) is a quadratic in u with nonnegative coefficients. If E(2) ≤ 2^(−λ) and E(2^(λ+1)) − E(2) ≤ 1 − 2^(−λ), then E(2Q+2) ≤ (Q+1)/2^λ for every Q < 2^λ. Proof idea: Convexity: the difference is at most zero at both ends of the range, hence in between. Note: E has pieces that no lemma of the paper draws on, among them the “+L” of its first term, most of its fifth term, and its sixth term. The paper says its bounds fit “with terms of E(u) to spare”, because E is the bound of the Lean statement.",
+   "group": "G",
+   "id": "new:ledger"
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma 5.5'",
+   "name": "Search range",
+   "statement": "Let $w \\in \\{0,1\\}^{N+1}$ with $w_0 = 1$, and let $r \\leftarrow \\mathcal{D}_g$ and $c_w$ be the center of Section 5.2. Then $|r(w) - c_w| \\le B$ for every $r$ in the support, and the expectation of $(r(w) - c_w)^2$ is at most $\\bigl( g \\sqrt{(N+4)/48} + 3/2 \\bigr)^2$.",
+   "proof": "Let $a := \\lceil N(g+1)/2 \\rceil$, $\\Sigma := \\sum_{i \\in [N]} r_i$, and $X := r_\\star + \\sum_{i \\in [N]} (w_i - 1/2)\\, r_i$, a sum of $N + 1$ independent terms. Each of $r_\\star, r_1, \\dots, r_N$ has mean $(g+3)/2$, lies within $(g-1)/2$ of it, and has variance $(g^2-1)/12$. So, as $|w_i - 1/2| = 1/2$, $X$ has mean $\\mu := \\frac{g+3}{2} (1 + \\operatorname{wt}(w) - N/2)$ and variance $(N+4)(g^2-1)/48$, and $|X - \\mu| \\le (N+2)(g-1)/4$. As $w_0 = 1$, $r(w) = r_0 + \\sum_{i \\in [N]} w_i r_i = a + X + \\Sigma/2 - \\lfloor \\Sigma/2 \\rfloor$, and $c_w = \\lfloor a + \\mu \\rfloor$, so $r(w) - c_w = (X - \\mu) + \\theta$ for the sum $\\theta \\in [0, 3/2)$ of the rounding errors $\\Sigma/2 - \\lfloor \\Sigma/2 \\rfloor \\le 1/2$ and $a + \\mu - \\lfloor a + \\mu \\rfloor < 1$. So $|r(w) - c_w| \\le (N+2)(g-1)/4 + 3/2 \\le (N+1)(g-1)/2 + (N+1)(g+3)/2 = B$, and by Minkowski's inequality in $L^2$ the square root of the expectation of $(r(w) - c_w)^2$ is at most $\\sqrt{(N+4)(g^2-1)/48} + 3/2 \\le g \\sqrt{(N+4)/48} + 3/2$.",
+   "explain": "|r(w) − c_w| ≤ B for every r in the support of the sampler, and E[(r(w) − c_w)²] ≤ (g·√((N+4)/48) + 3/2)² for the centered sampler. Proof idea: r(w) − c_w is a sum of independent centered terms plus two rounding errors.",
+   "group": "C",
+   "id": "new:range"
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma B.8'",
+   "name": "Packing a short multiple",
+   "statement": "Let the parameters satisfy (P3). If $x$ is a short multiple of a kernel vector, then $\\hat x \\in R^\\ell$, with the $\\hat x_j$ of Definition 5.1 over $\\mathbb{Z}$, solves MSIS for the matrix $A$ of the columns $1, \\dots, \\ell$ of $M$ (Definition 3.3): $0 < \\|\\hat x\\|_\\infty \\le \\beta$ and $A \\hat x = 0 \\bmod q$.",
+   "proof": "Modulo $q$, $x$ is a nonzero multiple of a kernel vector $v$; as $z$ is linear and $z(v) = 0$, $x \\not\\equiv 0$ and $\\varphi_e(x) \\equiv 0 \\bmod q$ for every $e$. As $\\varphi_0(x) = x_0$ and $|x_0| \\le \\beta < q$ by (P3), $x_0 = 0$. So the columns $1, \\dots, \\ell$ of $M$ map $\\hat x$ to zero modulo $q$: the criterion of Definition 5.1 for a vector with entry $0$ zero in the kernel of every form. The coefficients of $\\hat x$ are $x_1, \\dots, x_N$ and zeros, so $\\|\\hat x\\|_\\infty = \\|x\\|_\\infty \\le \\beta$, and positive, as $x \\not\\equiv 0$ and $x_0 = 0$.",
+   "explain": "Clause (c) of the heavy stacks lemma, alone: a short multiple of a kernel vector is an MSIS solution.",
+   "group": "L",
+   "id": "new:pack"
+  }
+ ],
+ "edges": [
+  {
+   "from": "blob:sampler-search",
+   "to": "new:gp-rank",
+   "kind": "background"
+  },
+  {
+   "from": "blob:stacks-gp",
+   "to": "new:gp-rank",
+   "kind": "background"
+  },
+  {
+   "from": "blob:bound-e",
+   "to": "new:ledger",
+   "kind": "background"
+  },
+  {
+   "from": "blob:sampler-search",
+   "to": "new:range",
+   "kind": "background"
+  },
+  {
+   "from": "blob:msis",
+   "to": "new:pack",
+   "kind": "background"
+  },
+  {
+   "from": "blob:forms-weights",
+   "to": "new:pack",
+   "kind": "background"
+  },
+  {
+   "from": "blob:kernel-short",
+   "to": "new:pack",
+   "kind": "background"
+  },
+  {
+   "from": "blob:admissibility",
+   "to": "new:pack",
+   "kind": "background"
+  }
+ ],
+ "discharge": [
+  {
+   "edge": [
+    "lem:ledger",
+    "thm:extraction"
+   ],
+   "by": [
+    "new:ledger"
+   ],
+   "argument": "The second sentence of Lemma B.2' is the demand: its two premises are admissibility condition (P5) word for word, and its conclusion is E(2Q+2) <= (Q+1)/2^lambda for every integer 0 <= Q < 2^lambda."
+  },
+  {
+   "edge": [
+    "lem:range",
+    "thm:correct"
+   ],
+   "by": [
+    "new:range"
+   ],
+   "argument": "Lemma 5.5' states |r(w) - c_w| <= B for every r in the support of D_g, the sampler of Enc in Appendix A, with c_w the center used by Dec; this is the demanded bound word for word."
+  },
+  {
+   "edge": [
+    "lem:range",
+    "prop:efficiency"
+   ],
+   "by": [
+    "new:range"
+   ],
+   "argument": "Proposition 5.7 is stated for Praxis as specified in Appendix A, whose Enc draws r from the centered sampler D_g and whose Dec uses the center c_w for D_g. For exactly this r and c_w, Lemma 5.5' states the bound E[(r(w) - c_w)^2] <= (g sqrt((N+4)/48) + 3/2)^2 with the same constants as the second case of the base lemma. Jensen's inequality then gives E sqrt|r(w) - c_w| <= (g sqrt((N+4)/48) + 3/2)^(1/2) = O(sqrt(g) N^(1/4)), the expected search of the demand. The dropped case (independent entries, Section 5.1) is not the scheme of Appendix A."
+  },
+  {
+   "edge": [
+    "lem:heavy",
+    "lem:reduction"
+   ],
+   "by": [
+    "new:gp-rank",
+    "lem:inverse",
+    "new:pack"
+   ],
+   "argument": "(a) A good mark's stack W is heavy (App. B.4), that is, gp(W) > θ (Definition 4.4). Lemma 4.5(a) states gp(W) ≤ g^(−rank W) for every stack. If rank W ≥ 4 then gp(W) ≤ g^(−4), as g ≥ 1, and g^(−4) < θ is one of the conditions (P3) of admissible parameters (Sec. 5.4); so W would be light. Hence rank W ≤ 3. (b) The kernel vector v found lies in the row space of the heavy mark stack W, so Lemma 4.5(b) gives gp(v^⊤) ≥ gp(W) > θ. A kernel vector is nonzero with z(v) = 0 (App. B.3), and z(v) = 0 means φ_e(v) = 0 for every e, with φ_0(v) = v_0 (Definition 5.1); so v_0 = 0. (P3) is the conditions (I1) to (I6) of Lemma B.7, whose statement then gives a short multiple of v. (c) Lemma B.8' states, under (P3), that for a short multiple x of a kernel vector, x̂ solves MSIS for the columns 1, …, ℓ of M, with 0 < ‖x̂‖_∞ ≤ β and A·x̂ = 0 mod q: this is clause (c) of Lemma B.8 word for word."
+  },
+  {
+   "edge": [
+    "lem:heavy",
+    "lem:extractor"
+   ],
+   "by": [
+    "new:gp-rank"
+   ],
+   "argument": "A good mark's stack W is heavy (App. B.4), that is, gp(W) > θ (Definition 4.4). Lemma 4.5(a) states gp(W) ≤ g^(−rank W) for every stack. If rank W ≥ 4 then gp(W) ≤ g^(−4), as g ≥ 1, and g^(−4) < θ is one of the conditions (P3) of admissible parameters (Sec. 5.4); so W would be light. Hence rank W ≤ 3."
+  }
+ ]
 }
