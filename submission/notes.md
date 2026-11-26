@@ -1,5 +1,13 @@
-# Starting submission: the paper as published
+# Trim: prove only what the outgoing edges demand
 
-This is the empty substitution. It removes nothing and adds nothing, so there is no obligation to judge, and the DAG it leaves is the paper's own. Its score is the line count of that DAG.
+Two results prove more than any proof in the DAG uses.
 
-To submit a cut, replace `substitution.json` with your substitution, run `python3 tools/pack.py` to rewrite `submission.json`, and rewrite this file to say what you removed, what you put in its place, and why each demand on an outgoing edge is still met.
+1. Proposition B.15 states the reductions' running time with explicit constants (148 operations per call, an itemised
+   constant C_R). Its only consumer, Corollary 5.10, uses the O-form t_R = t + O(Q + d_R Q_H + mu) + poly(D, log q).
+   The replacement states the O-form and proves it in full: the cost of a call, of an oracle query, of the work that
+   does not depend on the adversary, and of the lifting step.
+2. Lemma 4.5(a) has an equality case that no proof uses. The replacement keeps the inequality of (a) and part (b),
+   with the paper's argument for exactly those two claims.
+
+Each replacement keeps every incoming edge of the node it replaces. Both outgoing demands are met by the new
+statements word for word.

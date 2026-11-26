@@ -1,9 +1,139 @@
 {
-  "format": "paper-dag-substitution/1",
-  "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
-  "title": "Baseline: the paper as published, nothing removed, nothing added",
-  "remove": [],
-  "add": [],
-  "edges": [],
-  "discharge": []
+ "format": "paper-dag-substitution/1",
+ "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
+ "title": "Trim: the reductions' running time in O-form, and the rank bound without its equality case",
+ "remove": [
+  "prop:reduction-time",
+  "lem:gp-rank"
+ ],
+ "add": [
+  {
+   "id": "new:reduction-time",
+   "kind": "proposition",
+   "label": "Proposition B.15'",
+   "name": "Running time of the reductions, O-form",
+   "statement": "Under the hypotheses of Theorem 5.9, if $\\mathcal{A}$ runs in time $t$ and makes at most $Q_H$ queries to each of $H_{\\mathsf{seed}}$ and $H_{\\mathsf{key}}$, then $\\mathcal{B}_0$ and $\\mathcal{B}_1$ run in time at most $t_R = t + O(Q + d_R\\, Q_H + \\mu) + \\mathsf{poly}(D, \\log q)$.",
+   "proof": "Let $\\mathcal{B}_b$ sample the coins of (R2) first and follow the calls as $\\mathcal{A}$ makes them, with tables of labels, exponents, records, rejected strings, names and oracle answers; by Lemma B.14(a) this changes no output. Count its operations beyond the time $t$ of $\\mathcal{A}$ in four groups; write $N' := N + 1$.\n(i) Calls to $\\mathcal{O}_{\\mathsf{GG}}$. A call has one result and at most two operand strings. Answering it takes a bounded number of table lookups and insertions, one exponent, one value at $\\mathsf{a}_{\\mathrm{p}}$ for the record of (R3), one label, one name, and, for each operand string not yet in a table, one decision whether it is a label, one sampled exponent and one record of $0$: $O(1)$ operations. For (R4), at each of the six recovery points $\\mathcal{B}_b$ extends the straight-line computation of the exponents by the $O(1)$ operations of this call, and for each of the at most two expressions of (R3) computes its gradient in $r$ backwards through that computation, at $O(1)$ operations for each operation of it [Baur and Strassen, Theorem 2]. So the $Q$ calls cost $O(Q)$.\n(ii) Oracle queries. A query to $H_{\\mathsf{key}}$ is a lookup, a sample and an insertion. A query to $H_{\\mathsf{seed}}$ samples the $d_R$ coefficients of one element of $R_q$ and makes a lookup and an insertion. So the queries cost $O(d_R\\, Q_H)$.\n(iii) Work that does not depend on $\\mathcal{A}$. By the specification of $\\mathsf{Enc}$ the number $L$ of received labels is $O((K_1 + K_2) N' + D + n (J + J'))$. The exponents of all published elements are evaluated at eight points, the coins of $\\mathsf{Enc}$ and the seven points of (R2); one evaluation computes $z$ at its three points from $M$ in $O(k\\, d_R\\, N')$ operations, the $2N' + 3$ polynomials $A_i$, $B_i$, $Z$, $Z_0$, $L_\\rho$ at $\\tau$ by Horner's rule from their coefficients in $O(N' D)$, the scalars of the legs and cells in $O(n)$, the masks in $O(K_2 N')$, and then $O(1)$ operations for each published element. Entering the received labels takes $O(L)$. Placing the challenge and answering the $k(\\ell + 1)$ seed queries of $\\mathsf{Enc}$ takes $O(k \\ell + k\\, d_R)$, and the masked message $O(\\mu)$. After the run, for each of the at most two expressions, the gradients are reduced to two echelon forms of three vectors of $\\mathbb{F}_q^{N'}$ in $O(N')$, intersected with the kernel of $z$ in both sectors in $O(k\\, d_R\\, N')$, and one vector is packed in $O(N')$. The description of $\\mathcal{B}_b$ beyond that of $\\mathcal{A}$ holds the $O(N' D)$ coefficients of those polynomials, the evaluation points, $m_b$ and code of constant length: $O(N' D + \\mu)$. Now $k\\, d_R < n \\le D$ and $N < D$; $K_1 K_2 = n/2$ gives $K_1, K_2 \\le n$; $k \\ell \\le k (N + d_R) < n N'$; and $J \\le J\\Delta \\le D + n \\le 2D$ by (P1) while $J' \\le \\max\\{n_{\\mathsf{c}}, 1\\} \\le D$. Hence every term of this group is $O((N + n) D + \\mu)$.\n(iv) $\\mathsf{LIFT}$ is run at most twice, once for each expression of (R3), and each run takes time polynomial in $N$ and $\\log q$ by Lemma B.9.\nIn total $\\mathcal{B}_b$ runs in time at most $t + O(Q) + O(d_R\\, Q_H) + O((N + n) D + \\mu)$ plus two runs of $\\mathsf{LIFT}$, which is $t + O(Q + d_R\\, Q_H + \\mu) + \\mathsf{poly}(D, \\log q)$, as $N < D$ and $n \\le D$.",
+   "group": "L",
+   "explain": "The running time of the two reductions without explicit constants: linear in the adversary's calls and queries, plus a polynomial that does not depend on the adversary."
+  },
+  {
+   "id": "new:gp-rank",
+   "kind": "lemma",
+   "label": "Lemma 4.5'",
+   "name": "Rank bound, inequality only",
+   "statement": "For every stack $\\mathbf{W} = (W_c)_{c \\in C}$:\n\n \n(a) $\\operatorname{gp}(\\mathbf{W}) \\le g^{-\\operatorname{rank} \\mathbf{W}}$;\n(b) $\\operatorname{gp}(v^\\top) \\ge \\operatorname{gp}(\\mathbf{W})$ for every $v$ in the row space of $\\mathbf{W}$.",
+   "proof": "(a) Let $M$ be the matrix of all rows of all $W_c$, of rank $d := \\operatorname{rank} \\mathbf{W}$, and fix $u$. Choose $d$ linearly independent columns of $M$, column $0$ among them unless it is zero. Given the entries of $r$ at the other indices in $[N]$, at most one value modulo $q$ of its entries at the chosen indices solves $M r = u$. Each of the independent entries $r_1, \\dots, r_N$ takes a given value modulo $q$ with probability at most $1/g$, as $g + 1 < q$; so does $r_0$ given all of them. Hence $\\Pr[M r = u] \\le g^{-d}$, as in Odlyzko's lemma \\cite[Lemma 3.1]{NW22}.\n(b) Write $v = \\sum_c W_c^\\top z_c$. Then $v^\\top r = \\sum_c z_c^\\top W_c r$ is a function of $(W_c r)_c$, so it takes one value whenever $(W_c r)_c$ takes its likeliest value, and $\\operatorname{gp}(v^\\top) \\ge \\operatorname{gp}(\\mathbf{W})$.",
+   "group": "A",
+   "explain": "A stack of rank d is guessed with probability at most g^(-d), and a vector of its row space is at least as easy to guess as the stack."
+  }
+ ],
+ "edges": [
+  {
+   "from": "lem:reduction",
+   "to": "new:reduction-time",
+   "kind": "uses",
+   "demand": "Sampling the reduction's coins before the run changes no output.",
+   "clause": "(a)",
+   "where": "First line of the proof of B.15."
+  },
+  {
+   "from": "lem:lift",
+   "to": "new:reduction-time",
+   "kind": "uses",
+   "demand": "T_(LIFT) is polynomial in N and log q.",
+   "clause": "running time of LIFT",
+   "where": "Statement of B.15."
+  },
+  {
+   "from": "ext:bs",
+   "to": "new:reduction-time",
+   "kind": "uses",
+   "demand": "The gradient of a computation costs a constant number of operations per operation of the computation.",
+   "clause": "as cited",
+   "where": "Proof of Proposition B.15."
+  },
+  {
+   "from": "blob:ggm",
+   "to": "new:reduction-time",
+   "kind": "background"
+  },
+  {
+   "from": "blob:rom",
+   "to": "new:reduction-time",
+   "kind": "background"
+  },
+  {
+   "from": "blob:enc",
+   "to": "new:reduction-time",
+   "kind": "background"
+  },
+  {
+   "from": "blob:admissibility",
+   "to": "new:reduction-time",
+   "kind": "background"
+  },
+  {
+   "from": "blob:records",
+   "to": "new:reduction-time",
+   "kind": "background"
+  },
+  {
+   "from": "blob:reductions",
+   "to": "new:reduction-time",
+   "kind": "background"
+  },
+  {
+   "from": "blob:qap",
+   "to": "new:reduction-time",
+   "kind": "background"
+  },
+  {
+   "from": "blob:forms-weights",
+   "to": "new:reduction-time",
+   "kind": "background"
+  },
+  {
+   "from": "blob:copies-ties",
+   "to": "new:reduction-time",
+   "kind": "background"
+  },
+  {
+   "from": "blob:expressions",
+   "to": "new:reduction-time",
+   "kind": "background"
+  },
+  {
+   "from": "blob:sampler-search",
+   "to": "new:gp-rank",
+   "kind": "background"
+  },
+  {
+   "from": "blob:stacks-gp",
+   "to": "new:gp-rank",
+   "kind": "background"
+  }
+ ],
+ "discharge": [
+  {
+   "edge": [
+    "prop:reduction-time",
+    "cor:ext-error"
+   ],
+   "by": [
+    "new:reduction-time"
+   ],
+   "argument": "The demand asks that B_0 and B_1 run within t_R = t + O(Q + d_R Q_H + mu) + poly(D, log q). The new statement is that bound, under the same hypotheses; s_b <= Adv^MSIS(t_R) then holds by the definition of Adv^MSIS(t_R) in the corollary."
+  },
+  {
+   "edge": [
+    "lem:gp-rank",
+    "lem:heavy"
+   ],
+   "by": [
+    "new:gp-rank"
+   ],
+   "argument": "The demand asks for the inequality gp(W) <= g^(-rank W) of part (a), so that rank >= 4 gives gp <= g^(-4) < theta, and for part (b), gp(v^T) >= gp(W) for v in the row space. Both are parts (a) and (b) of the new statement, word for word."
+  }
+ ]
 }
