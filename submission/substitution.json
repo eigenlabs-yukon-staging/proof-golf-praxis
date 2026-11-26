@@ -1,9 +1,144 @@
 {
   "format": "paper-dag-substitution/1",
   "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
-  "title": "Baseline: the paper as published, nothing removed, nothing added",
-  "remove": [],
-  "add": [],
-  "edges": [],
-  "discharge": []
+  "title": "Target slice and direct algebraic bounds",
+  "remove": [
+    "lem:we-hiding",
+    "lem:rank-one",
+    "prop:hs-dimension",
+    "ext:hs",
+    "lem:ledger",
+    "lem:lattice-facts",
+    "lem:range"
+  ],
+  "add": [
+    {
+      "id": "new:ledger",
+      "kind": "lemma",
+      "label": "Direct ledger",
+      "name": "Generic bound",
+      "statement": "Under (P5), E(2Q+2) ≤ (Q+1)/2^λ for every integer 0 ≤ Q < 2^λ.",
+      "proof": "The coefficient of u² in E is (θ+ε_f)/2+9ε_f/2 ≥ 0, so E is convex. By (P5) its values at 2 and 2^{λ+1} are at most 2^{-λ} and 1, respectively. The affine function u/2^{λ+1} has exactly these endpoint values, so it bounds E from above on the interval by convexity. Set u=2Q+2.",
+      "explain": "Direct derivation from the linked premises."
+    },
+    {
+      "id": "new:lattice-facts",
+      "kind": "lemma",
+      "label": "Direct lattice-facts",
+      "name": "Integer lattices",
+      "statement": "Let $\\Theta \\subseteq \\mathbb{Z}^I$ be a lattice of rank $d$ with a basis matrix $B$.\n\n \n(a) If $\\Theta$ has a largest minor at $J$, then $|y_i| \\le \\|y_J\\|_1$ for all $y \\in \\operatorname{span}_{\\mathbb{R}}(\\Theta)$ and $i \\in I$.\n(b) If $\\Theta$ is saturated, then $B^\\top \\mathbb{Z}^I = \\mathbb{Z}^d$.\n(c) For prime $q$, if an integer matrix $\\Delta$ with rows indexed by $I$ has rank $k$ and $k \\times k$ minors below $q$ in absolute value, then every $c \\in \\mathbb{Z}^I$ with $c^\\top \\Delta = 0 \\bmod q$ is congruent modulo $q$ to a $u \\in \\mathbb{Z}^I$ with $u^\\top \\Delta = 0$.",
+      "proof": "If J indexes a largest minor, Cramer's rule gives each entry of B_i B_J^{-1} as a signed maximal minor divided by det B_J (or zero). Thus y_i=(B_i B_J^{-1})y_J has magnitude at most ‖y_J‖₁, and B_J invertible implies injectivity. For saturated Θ, extend B to a unimodular matrix U. The first d rows of U^{-1} give an integer left inverse of B; its transpose is a right inverse of Bᵀ. For (c) write UΔV=S in Smith normal form, with U,V unimodular. The nonzero k-minor of magnitude below q survives reduction, so S has rank k modulo q and each of its k nonzero diagonal entries is a unit there. Thus cᵀU^{-1} has its first k entries divisible by q. Zero those entries to obtain zᵀ. Then zᵀS=0 and uᵀ=zᵀU is the required integral lift.",
+      "explain": "Direct derivation from the linked premises."
+    },
+    {
+      "id": "new:range",
+      "kind": "lemma",
+      "label": "Direct range",
+      "name": "Search range",
+      "statement": "For either sampler and its corresponding center c_w in the linked definition, let w be binary with w_0=1 and put k=1+wt(w). Throughout the support |r(w)−c_w|≤B. The second moment of r(w)−c_w is at most (g√(k/12)+1/2)² for independent coordinates and (g√((N+4)/48)+3/2)² for the centered sampler.",
+      "proof": "Put m=(g+3)/2 and let Y denote a uniform draw from {2,…,g+1} minus m. Summing (j−(g−1)/2)² over 0≤j<g gives Var(Y)=(g²−1)/12, and |Y|≤(g−1)/2. For a sum Z of independent copies with real coefficients a_i and any rounding error of magnitude ≤b, the pointwise bound is (g−1)Σ|a_i|/2+b and the L² bound is g√(Σa_i²/12)+b, by the triangle inequality and independence. In the independent sampler the deviation has k coefficients 1 and rounding error km−⌊km⌋≤1/2 because 2km is integral. In the centered sampler the identity −⌊s/2⌋=−s/2+(s/2−⌊s/2⌋), for s=Σr_i over 1≤i≤N, gives coefficients 1 on the star draw and w_i−1/2 on the others. The rounding error is the sum of s/2−⌊s/2⌋ and the fractional part of the unrounded center, hence is ≤3/2. The coefficient norms give the stated squared L² bounds. The pointwise bounds are k(g−1)/2+1/2 and (N+2)(g−1)/4+3/2, each at most (N+1)(g+1)=B.",
+      "explain": "Direct derivation from the linked premises."
+    }
+  ],
+  "edges": [
+    {
+      "from": "blob:bound-e",
+      "to": "new:ledger",
+      "kind": "background"
+    },
+    {
+      "kind": "background",
+      "to": "new:ledger",
+      "from": "blob:admissibility"
+    },
+    {
+      "from": "ext:cas",
+      "to": "new:lattice-facts",
+      "kind": "uses",
+      "demand": "A basis of a saturated lattice extends to a basis of Z^I."
+    },
+    {
+      "from": "blob:lattices",
+      "to": "new:lattice-facts",
+      "kind": "background"
+    },
+    {
+      "from": "blob:sampler-search",
+      "to": "new:range",
+      "kind": "background"
+    }
+  ],
+  "discharge": [
+    {
+      "edge": [
+        "lem:ledger",
+        "thm:extraction"
+      ],
+      "by": [
+        "new:ledger"
+      ],
+      "argument": "The bound is stated with exactly (P5) and the stipulated range of Q."
+    },
+    {
+      "edge": [
+        "lem:lattice-facts",
+        "lem:prefix"
+      ],
+      "by": [
+        "new:lattice-facts"
+      ],
+      "argument": "Part (b) states the required surjectivity."
+    },
+    {
+      "edge": [
+        "lem:lattice-facts",
+        "lem:sparse"
+      ],
+      "by": [
+        "new:lattice-facts"
+      ],
+      "argument": "Apply (b) to the saturated normal lattice with basis V."
+    },
+    {
+      "edge": [
+        "lem:lattice-facts",
+        "lem:regularize"
+      ],
+      "by": [
+        "new:lattice-facts"
+      ],
+      "argument": "By (a), vanishing at J forces every coordinate to vanish."
+    },
+    {
+      "edge": [
+        "lem:lattice-facts",
+        "lem:inverse"
+      ],
+      "by": [
+        "new:lattice-facts"
+      ],
+      "argument": "Part (a) bounds every coordinate by the ℓ₁ norm on J, hence gives injectivity, and (c) gives the claimed integral lift of a modular relation over the prime q of the inverse theorem."
+    },
+    {
+      "edge": [
+        "lem:range",
+        "thm:correct"
+      ],
+      "by": [
+        "new:range"
+      ],
+      "argument": "The deterministic bound on the whole support is the first conclusion."
+    },
+    {
+      "edge": [
+        "lem:range",
+        "prop:efficiency"
+      ],
+      "by": [
+        "new:range"
+      ],
+      "argument": "The second moments match both sampler bounds. Jensen bounds the expected square root of the absolute deviation by the fourth root of its second moment, which is O(√g·N^{1/4}) for N≥1."
+    }
+  ],
+  "replaces": {}
 }
