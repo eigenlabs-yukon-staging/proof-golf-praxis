@@ -1,5 +1,3 @@
-# Starting submission: the paper as published
+# Target slice and direct proofs
 
-This is the empty substitution. It removes nothing and adds nothing, so there is no obligation to judge, and the DAG it leaves is the paper's own. Its score is the line count of that DAG.
-
-To submit a cut, replace `substitution.json` with your substitution, run `python3 tools/pack.py` to rewrite `submission.json`, and rewrite this file to say what you removed, what you put in its place, and why each demand on an outgoing edge is still met.
+The inverse proof derives the lattice estimates in one node. A pole calculation supplies the view and reduction interfaces. The extractor's three independent sketches span the mark row space with the stated failure bound, which the proof derives by counting dependent rows. All proofs and discharge arguments are in substitution.json.
