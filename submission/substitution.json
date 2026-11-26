@@ -1,9 +1,305 @@
 {
-  "format": "paper-dag-substitution/1",
-  "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
-  "title": "Baseline: the paper as published, nothing removed, nothing added",
-  "remove": [],
-  "add": [],
-  "edges": [],
-  "discharge": []
+ "format": "paper-dag-substitution/1",
+ "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
+ "title": "Classification reduced to the one conclusion its consumer uses; inverse theorem by reference to its fixed conditions; heavy-stacks glue reduced to its packing clause; slice; three lemmas without unused clauses",
+ "remove": [
+  "lem:we-hiding",
+  "lem:rank-one",
+  "prop:hs-dimension",
+  "ext:hs",
+  "lem:gp-rank",
+  "lem:ledger",
+  "lem:range",
+  "lem:heavy",
+  "lem:inverse",
+  "ext:mink",
+  "lem:classification"
+ ],
+ "add": [
+  {
+   "id": "new:gp-rank",
+   "kind": "lemma",
+   "label": "Lemma 4.5'",
+   "name": "Rank bound, inequality only",
+   "statement": "For every stack $\\mathbf{W} = (W_c)_{c \\in C}$:\n\n \n(a) $\\operatorname{gp}(\\mathbf{W}) \\le g^{-\\operatorname{rank} \\mathbf{W}}$;\n(b) $\\operatorname{gp}(v^\\top) \\ge \\operatorname{gp}(\\mathbf{W})$ for every $v$ in the row space of $\\mathbf{W}$.",
+   "proof": "(a) Let $M$ be the matrix of all rows of all $W_c$, of rank $d := \\operatorname{rank} \\mathbf{W}$, and fix $u$. Choose $d$ linearly independent columns of $M$, column $0$ among them unless it is zero. Given the entries of $r$ at the other indices in $[N]$, at most one value modulo $q$ of its entries at the chosen indices solves $M r = u$. Each of the independent entries $r_1, \\dots, r_N$ takes a given value modulo $q$ with probability at most $1/g$, as $g + 1 < q$; so does $r_0$ given all of them. Hence $\\Pr[M r = u] \\le g^{-d}$, as in Odlyzko's lemma \\cite[Lemma 3.1]{NW22}.\n(b) Write $v = \\sum_c W_c^\\top z_c$. Then $v^\\top r = \\sum_c z_c^\\top W_c r$ is a function of $(W_c r)_c$, so it takes one value whenever $(W_c r)_c$ takes its likeliest value, and $\\operatorname{gp}(v^\\top) \\ge \\operatorname{gp}(\\mathbf{W})$.",
+   "group": "A",
+   "explain": "A stack of rank d is guessed with probability at most g^(-d), and a vector of its row space is at least as easy to guess as the stack."
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma B.2'",
+   "name": "Generic bound",
+   "statement": "$E$ is a polynomial of degree two in $u$ with nonnegative coefficients. If $E(2) \\le 2^{-\\lambda}$ and $E(2^{\\lambda+1}) - E(2) \\le 1 - 2^{-\\lambda}$, then $E(2Q + 2) \\le (Q+1)/2^\\lambda$ for every integer $0 \\le Q < 2^\\lambda$.",
+   "proof": "Every term of $E(u)$ is a polynomial in $u$ with nonnegative coefficients, as $L \\ge 1$, of degree two for $N_{\\mathrm{cmp}}(u)$ and at most two otherwise. So $Q \\mapsto E(2Q+2) - (Q+1)/2^\\lambda$ is convex; by the premises it is at most $0$ at $Q = 0$ and at $Q = 2^\\lambda - 1$, where it is $E(2^{\\lambda+1}) - 1$, hence in between.",
+   "explain": "The budget E(u) is a quadratic in u with nonnegative coefficients. If E(2) ≤ 2^(−λ) and E(2^(λ+1)) − E(2) ≤ 1 − 2^(−λ), then E(2Q+2) ≤ (Q+1)/2^λ for every Q < 2^λ. Proof idea: Convexity: the difference is at most zero at both ends of the range, hence in between. Note: E has pieces that no lemma of the paper draws on, among them the “+L” of its first term, most of its fifth term, and its sixth term. The paper says its bounds fit “with terms of E(u) to spare”, because E is the bound of the Lean statement.",
+   "group": "G",
+   "id": "new:ledger"
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma 5.5'",
+   "name": "Search range",
+   "statement": "Let $w \\in \\{0,1\\}^{N+1}$ with $w_0 = 1$, and let $r \\leftarrow \\mathcal{D}_g$ and $c_w$ be the center of Section 5.2. Then $|r(w) - c_w| \\le B$ for every $r$ in the support, and the expectation of $(r(w) - c_w)^2$ is at most $\\bigl( g \\sqrt{(N+4)/48} + 3/2 \\bigr)^2$.",
+   "proof": "Let $a := \\lceil N(g+1)/2 \\rceil$, $\\Sigma := \\sum_{i \\in [N]} r_i$, and $X := r_\\star + \\sum_{i \\in [N]} (w_i - 1/2)\\, r_i$, a sum of $N + 1$ independent terms. Each of $r_\\star, r_1, \\dots, r_N$ has mean $(g+3)/2$, lies within $(g-1)/2$ of it, and has variance $(g^2-1)/12$. So, as $|w_i - 1/2| = 1/2$, $X$ has mean $\\mu := \\frac{g+3}{2} (1 + \\operatorname{wt}(w) - N/2)$ and variance $(N+4)(g^2-1)/48$, and $|X - \\mu| \\le (N+2)(g-1)/4$. As $w_0 = 1$, $r(w) = r_0 + \\sum_{i \\in [N]} w_i r_i = a + X + \\Sigma/2 - \\lfloor \\Sigma/2 \\rfloor$, and $c_w = \\lfloor a + \\mu \\rfloor$, so $r(w) - c_w = (X - \\mu) + \\theta$ for the sum $\\theta \\in [0, 3/2)$ of the rounding errors $\\Sigma/2 - \\lfloor \\Sigma/2 \\rfloor \\le 1/2$ and $a + \\mu - \\lfloor a + \\mu \\rfloor < 1$. So $|r(w) - c_w| \\le (N+2)(g-1)/4 + 3/2 \\le (N+1)(g-1)/2 + (N+1)(g+3)/2 = B$, and by Minkowski's inequality in $L^2$ the square root of the expectation of $(r(w) - c_w)^2$ is at most $\\sqrt{(N+4)(g^2-1)/48} + 3/2 \\le g \\sqrt{(N+4)/48} + 3/2$.",
+   "explain": "|r(w) − c_w| ≤ B for every r in the support of the sampler, and E[(r(w) − c_w)²] ≤ (g·√((N+4)/48) + 3/2)² for the centered sampler. Proof idea: r(w) − c_w is a sum of independent centered terms plus two rounding errors.",
+   "group": "C",
+   "id": "new:range"
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma B.8'",
+   "name": "Packing a short multiple",
+   "statement": "Let the parameters satisfy (P3). If $x$ is a short multiple of a kernel vector, then $\\hat x \\in R^\\ell$, with the $\\hat x_j$ of Definition 5.1 over $\\mathbb{Z}$, solves MSIS for the matrix $A$ of the columns $1, \\dots, \\ell$ of $M$ (Definition 3.3): $0 < \\|\\hat x\\|_\\infty \\le \\beta$ and $A \\hat x = 0 \\bmod q$.",
+   "proof": "Modulo $q$, $x$ is a nonzero multiple of a kernel vector $v$; as $z$ is linear and $z(v) = 0$, $x \\not\\equiv 0$ and $\\varphi_e(x) \\equiv 0 \\bmod q$ for every $e$. As $\\varphi_0(x) = x_0$ and $|x_0| \\le \\beta < q$ by (P3), $x_0 = 0$. So the columns $1, \\dots, \\ell$ of $M$ map $\\hat x$ to zero modulo $q$: the criterion of Definition 5.1 for a vector with entry $0$ zero in the kernel of every form. The coefficients of $\\hat x$ are $x_1, \\dots, x_N$ and zeros, so $\\|\\hat x\\|_\\infty = \\|x\\|_\\infty \\le \\beta$, and positive, as $x \\not\\equiv 0$ and $x_0 = 0$.",
+   "explain": "Clause (c) of the heavy stacks lemma, alone: a short multiple of a kernel vector is an MSIS solution.",
+   "group": "L",
+   "id": "new:pack"
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma B.7'",
+   "name": "Inverse theorem",
+   "statement": "Let $q$ be prime, and let $N$, $g$, $\\theta$, and the integer $\\beta$ satisfy the conditions (I1) to (I6) of the inverse theorem, for an integer $b$ and positive reals $\\varepsilon_{\\mathrm{tr}}$, $R_{\\mathrm{tr}}$, $\\Lambda_1, \\Lambda_2, \\Lambda_3$, $\\Gamma_1, \\Gamma_2, \\Gamma_3$, $A_{\\mathrm{inv}}$, $P_1$, and $P_2$. Then every nonzero $v \\in \\mathbb{F}_q^{N+1}$ with $v_0 = 0$ and $\\operatorname{gp}(v^\\top) > \\theta$ has a short multiple $x$, and $x_0 = 0$.",
+   "proof": "For $i = 1, \\dots, N_0$ in turn, we find a regular saturated lattice $\\Theta \\subseteq \\mathbb{Z}^{[i]}$ of a rank $d \\in [3]$ with $v_{[i]} \\in \\bar\\Theta$ and $m(\\Theta) \\ge \\operatorname{gp}(v_{[i]}^\\top) - 3\\varepsilon_{\\mathrm{tr}}$; so $m(\\Theta) > \\theta - 3\\varepsilon_{\\mathrm{tr}} > \\mu_{\\mathrm{tr}}$, as $\\theta < \\operatorname{gp}(v_{[i]}^\\top) \\le 1/g$ for $i \\in [N_0]$, and $h(\\Theta) \\le H_d$, for $d \\le 2$ by regularity, as $H_d = \\Gamma_d/(g^d \\mu_{\\mathrm{tr}})$, and for $d = 3$ by Lemma B.18(c). For $i = 1$, $\\mathbb{Z}^{[1]}$ serves: its reduction $\\mathbb{F}_q$ contains $v_{[1]}$, its fibers are points, so $m = 1/g \\ge \\operatorname{gp}(v_{[1]}^\\top)$, and $h = 1 \\le \\Gamma_1$, by (I4) and $\\mu_{\\mathrm{tr}} < 1/g$.\n\n\\emph{Adding a coordinate.} Let $i < N_0$, and let $\\Theta$ have a largest minor at $J$. Restriction to $J$ maps $\\Theta$ injectively (Lemma B.17(a)) onto a lattice of determinant $h(\\Theta)$ in $\\mathbb{R}^J$. As the unit ball of $\\|\\cdot\\|_1$ has volume $2^d/d!$, the successive minima $\\lambda_1 \\le \\dots \\le \\lambda_d$ of that lattice for $\\|\\cdot\\|_1$ have $\\lambda_1 \\cdots \\lambda_d \\le d!\\, h(\\Theta)$, by Minkowski's second theorem \\cite[Chapter VIII, Theorem V]{Cas97}; and by Mahler's lemma \\cite[Chapter V, Lemma 8]{Cas97}, for linearly independent vectors that attain them, the lattice has a basis of $\\ell_1$ norms at most $\\lambda_1$, $\\lambda_2$, and $\\max\\{\\lambda_3, (\\lambda_1 + \\lambda_2 + \\lambda_3)/2\\} \\le \\frac32 \\lambda_3$. So, by the same part, $\\Theta$ has a basis matrix $B$ with $\\prod_j \\|B e_j\\|_\\infty \\le h(\\Theta)$, $2h(\\Theta)$, or $9h(\\Theta)$ for $d = 1, 2, 3$.\n\nAs $v_{[i]} \\in \\bar\\Theta$, $v_{[i]} = B c' \\bmod q$ for some $c' \\in \\mathbb{F}_q^d$; with $c := (c', v_{i+1})$ and $\\Phi(r) := (B^\\top r_{[i]}, r_{i+1})$, $v_{[i+1]}^\\top r = c^\\top \\Phi(r) \\bmod q$. Let $F$ be a densest modular fiber $\\{ r : v_{[i+1]}^\\top r = t \\bmod q \\}$ of $v_{[i+1]}$, trimmed by $\\Theta$, so that $\\Pr[F] \\ge \\operatorname{gp}(v_{[i+1]}^\\top) - \\varepsilon_{\\mathrm{tr}} > \\theta - \\varepsilon_{\\mathrm{tr}}$ by Lemma B.19 and $\\operatorname{gp}(v_{[i+1]}^\\top) > \\theta$. As $v_{i+1} \\ne 0$, $\\Phi(F)$ lies in a coset of the subgroup $\\{ y \\in \\mathbb{Z}^{d+1} : c^\\top y = 0 \\bmod q \\}$ of index $q$, so $k := \\dim \\Phi(F) \\le d$: otherwise Lemma B.20(a), regularity, and (I5) would give $\\Pr[F] \\le \\Lambda_d \\Gamma_d/q < \\mu_{\\mathrm{tr}} < \\theta - \\varepsilon_{\\mathrm{tr}}$.\n\nLet $\\Delta$ be the matrix of the differences of the points of $\\Phi(F)$, of rank $k$. By the Cauchy--Schwarz inequality $(e_j^\\top y)^2 \\le (e_j^\\top \\Sigma_\\Theta e_j)(y^\\top \\Sigma_\\Theta^{-1} y)$, with $e_j^\\top \\Sigma_\\Theta e_j \\le \\frac{g^2 N}{12} \\|B e_j\\|_\\infty^2$, entries $j$ of two points of $\\mathcal{T}_\\Theta$ differ by at most $2 R_{\\mathrm{tr}}\\, g \\sqrt{N/12}\\, \\|B e_j\\|_\\infty = T_{\\mathrm{tr}} \\|B e_j\\|_\\infty$, which bounds the entries of the row $j \\in [d]$ of $\\Delta$; those of its last row are at most $g - 1 < T_{\\mathrm{tr}}$, as $R_{\\mathrm{tr}} \\ge 20$. As $T_{\\mathrm{tr}}$ and the $\\|B e_j\\|_\\infty$ are at least $1$, the $k \\times k$ minors of $\\Delta$, at most $k!$ times a product of $k$ of these bounds, are at most $d!\\, T_{\\mathrm{tr}}^d \\prod_j \\|B e_j\\|_\\infty$, which is at most $H_1 T_{\\mathrm{tr}}$, $4 H_2 T_{\\mathrm{tr}}^2$, or $54 H_3 T_{\\mathrm{tr}}^3$, below $q$ by (I5). As $c^\\top \\Delta = 0 \\bmod q$, Lemma B.17(c), for an integer vector that reduces to $c$, gives $c = u \\bmod q$ for a $u \\in \\mathbb{Z}^{d+1}$ with $u^\\top \\Delta = 0$. Then $(B u_{[d]}, u_{d+1})^\\top r = u^\\top \\Phi(r)$ is constant on $F$, so $(B u_{[d]}, u_{d+1}) \\in F^\\perp$, and it reduces to $(B c', v_{i+1}) = v_{[i+1]}$; so $v_{[i+1]} \\in \\overline{F^\\perp}$ and $F^\\perp \\ne \\{0\\}$. Then $m(F^\\perp) \\ge \\Pr[F] > \\theta - \\varepsilon_{\\mathrm{tr}} \\ge \\mu_{\\mathrm{tr}} + 2\\varepsilon_{\\mathrm{tr}}$, so $F^\\perp$ has rank in $[3]$, by (I5), and Lemma B.21 gives a regular saturated $\\Theta^+ \\supseteq F^\\perp$ with $m(\\Theta^+) \\ge m(F^\\perp) - 2\\varepsilon_{\\mathrm{tr}} \\ge \\operatorname{gp}(v_{[i+1]}^\\top) - 3\\varepsilon_{\\mathrm{tr}}$ and $v_{[i+1]} \\in \\overline{\\Theta^+}$: the lattice for $i + 1$.\n\n\\emph{The short multiple.} Let $\\Theta$ be the lattice for $N_0$, $B$ a basis matrix of it with a largest minor at $J$, and $z_0 \\in \\mathbb{Z}^d$ with $B z_0 = v_{[N_0]} \\bmod q$, so $z_0 \\ne 0 \\bmod q$. The $z \\in \\mathbb{Z}^d$ congruent modulo $q$ to multiples of $z_0$ form a subgroup of index $q^{d-1}$, so the $B_J z$ form a lattice of determinant $h(\\Theta)\\, q^{d-1}$ in $\\mathbb{R}^J$, and $d!\\, h(\\Theta)\\, q^{d-1} \\le \\beta^d$ by (I6): $h(\\Theta) \\le H_1 \\le \\beta$, $2 h(\\Theta)\\, q \\le 2 H_2\\, q \\le \\beta^2$, or $6 h(\\Theta)\\, q^2 \\le 6 \\lfloor H_3 \\rfloor q^2 \\le \\beta^3$, as heights are integers. By Minkowski's second theorem again, the successive minima of this lattice for $\\|\\cdot\\|_1$ have $\\lambda_1^d \\le \\lambda_1 \\cdots \\lambda_d \\le d!\\, h(\\Theta)\\, q^{d-1} \\le \\beta^d$, so it has a nonzero point $B_J z$ with $\\|B_J z\\|_1 = \\lambda_1 \\le \\beta$. Then $x := B z$ is congruent modulo $q$ to a multiple of $v_{[N_0]}$, a nonzero one as $0 < \\|x\\|_\\infty \\le \\|x_J\\|_1 \\le \\beta < q$ (Lemma B.17(a), (I6)): $x$ is a short multiple of $v_{[N_0]}$, and extended by zeros it is one of $v$ with $x_0 = 0$.",
+   "explain": "Under conditions (I1) to (I6) on (q, N, g, θ, β): every nonzero v in F_q^(N+1) with v_0 = 0 and gp(v^⊤) > θ has a short multiple, that is an integer vector x with ‖x‖_∞ ≤ β and x_0 = 0 whose reduction mod q is a nonzero multiple of v. Proof idea: Read the coordinates of v one at a time, keeping a saturated integer lattice of rank at most three whose reduction contains the prefix. Trimming, a lattice-point count that rules out wrap-around mod q, and a regularization step extend it; Minkowski's theorem in the last lattice gives the short multiple.",
+   "group": "L",
+   "id": "new:inverse"
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma B.6'",
+   "name": "A witness in the row space",
+   "statement": "A nonzero usable stack whose row space has dimension at most three and contains no kernel vector has a witness of $S$ in its row space.",
+   "proof": "\\emph{Step 1: one symmetric tensor.} Let $\\mathbf{W}$ be such a stack, with row space $\\mathcal{V}$. The symmetric matrices $W_U$ and $W_V$ over $\\mathbb{F}_{q^n}$ determine the stack, and with $z_s := \\sigma^s(z)$ and $W_s := W_U$, $W_V$, and $\\sigma^{n/2+1}(W_U)$ for $s \\in I := \\{n/2 - 1, n/2, n/2 + 1\\}$, the ties are $W_s\\, z_{s'} = W_{s'}\\, z_s$ for $s, s' \\in I$. Let $d := \\dim \\mathcal{V}$, let the columns of $\\mathcal{U} \\in \\mathbb{F}_q^{(N+1) \\times d}$ be a basis of $\\mathcal{V}$, with rows $u_i \\in \\mathbb{F}_q^d$, which span $\\mathbb{F}_q^d$, and let $h_s := \\mathcal{U}^\\top z_s = \\sigma^s(h_0)$. The entries of $h_0$, the values of $z$ on the basis, are linearly independent over $\\mathbb{F}_q$, as $\\mathcal{V}$ contains no kernel vector; so $d \\le n$, and by Lemma B.5 the $h_s$, $s \\in I$, span $\\mathbb{F}_{q^n}^d$, as $d \\le 3$. Each $W_s$ is symmetric with columns in the $\\mathbb{F}_{q^n}$-span of $\\mathcal{V}$, so $W_s = \\mathcal{U}\\, \\Xi_s\\, \\mathcal{U}^\\top$ for a unique symmetric $\\Xi_s$, and the ties read $\\Xi_s\\, h_{s'} = \\Xi_{s'}\\, h_s$. So if $\\sum_{s \\in I} \\varrho_s h_s = 0$, then $(\\sum_s \\varrho_s \\Xi_s)\\, h_{s'} = \\Xi_{s'} \\sum_s \\varrho_s h_s = 0$ for all $s'$, so $\\sum_s \\varrho_s \\Xi_s = 0$, as the $h_{s'}$ span. Hence there is a linear map $\\Xi$ from $\\mathbb{F}_{q^n}^d$ to symmetric matrices with $\\Xi(h_s) = \\Xi_s$ for $s \\in I$, and the trilinear form $\\Xi(h; u, u') := u^\\top\\, \\Xi(h)\\, u'$ is symmetric in $u$ and $u'$ and, by the ties, in $h$ and $u'$, hence in all three. Booleanity at $j \\in [N]$ is linear over $\\mathbb{F}_q$, so the $W_s$ satisfy it: $\\Xi(h; u_j, u_j - u_0) = 0$ for $h = h_s$, hence for all $h$. Also $\\Xi_s = \\sigma^s(\\Xi_{n-s})$ for $s \\in \\{n/2-1, n/2\\}$, as $\\sigma^n = \\mathrm{id}$ and $\\sigma^{n/2}$ fixes $W_V$, a polynomial in $T^2$.\n\n\\emph{Step 2: cubes of Boolean points, for $u_0 \\ne 0$.} Extend $l_0 := u_0$ by vectors $l_k := u_{j_k}$, $k \\in [d-1]$, to a basis of $\\mathbb{F}_q^d$. For $\\delta \\in \\{0,1\\}^{d-1}$ let $p_\\delta \\in \\mathbb{F}_q^d$ be the point with $\\langle l_0, p_\\delta \\rangle = 1$ and $\\langle l_k, p_\\delta \\rangle = \\delta_k$, and let $w_\\delta := \\mathcal{U} p_\\delta \\in \\mathcal{V}$, an assignment, as its entry $0$ is $\\langle u_0, p_\\delta \\rangle = 1$. By Booleanity at the $j_k$ and symmetry, $\\Xi(l_a; l_b, l_c)$ depends only on the set $A \\subseteq [d-1]$ of the nonzero indices among $a, b, c$, and the cube $\\langle h, p_\\delta \\rangle \\langle u, p_\\delta \\rangle \\langle u', p_\\delta \\rangle$ of $p_\\delta$ has the value $\\delta^A := \\prod_{k \\in A} \\delta_k$ there. The matrix $(\\delta^A)_{A, \\delta}$ is invertible, as the monomials $\\delta^A$ are a basis of the functions on the Boolean cube. So there are $c_\\delta \\in \\mathbb{F}_{q^n}$ with $\\Xi(h) = \\sum_{\\delta} c_\\delta\\, \\langle h, p_\\delta \\rangle\\, p_\\delta\\, p_\\delta^\\top$; and the squares $p_\\delta\\, p_\\delta^\\top$ are linearly independent, as they have the values $\\delta^A$ on the pairs $(l_a, l_b)$, whose sets $A$ are all the subsets of $[d-1]$, as $d - 1 \\le 2$. Let $\\bar z_\\delta := z(w_\\delta) = \\langle h_0, p_\\delta \\rangle$, nonzero as $w_\\delta$ is no kernel vector; then $\\langle h_s, p_\\delta \\rangle = \\sigma^s(\\bar z_\\delta)$, so $\\Xi_s = \\sum_\\delta c_\\delta\\, \\sigma^s(\\bar z_\\delta)\\, p_\\delta p_\\delta^\\top$. Comparing the coefficients of the squares, which are over $\\mathbb{F}_q$, in $\\Xi_s = \\sigma^s(\\Xi_{n-s})$ gives $c_\\delta\\, \\sigma^s(\\bar z_\\delta) = \\sigma^s(c_\\delta)\\, \\bar z_\\delta$ for $s \\in \\{n/2-1, n/2\\}$: so $\\sigma^{n/2-1}$ and $\\sigma^{n/2}$, hence $\\sigma$, fix $c_\\delta / \\bar z_\\delta$, and $c_\\delta = \\chi_\\delta\\, \\bar z_\\delta$ with $\\chi_\\delta \\in \\mathbb{F}_q$. So $W_s = \\mathcal{U}\\, \\Xi_s\\, \\mathcal{U}^\\top = \\sum_\\delta \\chi_\\delta\\, \\bar z_\\delta\\, \\sigma^s(\\bar z_\\delta)\\, w_\\delta w_\\delta^\\top$ for $s \\in I$.\n\n\\emph{Step 3: a witness, for $u_0 \\ne 0$.} Let $\\varrho$ be a linear function of a matrix, with coefficients in $\\mathbb{F}_q$, whose vanishing is one of the tests; as $\\mathbf{W}$ passes, $\\varrho$ vanishes on every $W_c$. As $\\sigma^j(T) = \\omega^j T$, each $W_s$ is a combination of the $W_c$ over $\\mathbb{F}_{q^n}$. So $\\varrho$ vanishes on $W_s = \\sum_\\delta \\chi_\\delta\\, \\bar z_\\delta\\, \\sigma^s(\\bar z_\\delta)\\, w_\\delta w_\\delta^\\top$ for $s \\in I$; that is, $h_0^\\top \\mathcal{Q}\\, h_s = 0$ for $\\mathcal{Q} := \\sum_\\delta \\chi_\\delta\\, \\varrho(w_\\delta w_\\delta^\\top)\\, p_\\delta p_\\delta^\\top$ over $\\mathbb{F}_q$. As the $h_s$ span, $h_0^\\top \\mathcal{Q} = 0$; so $\\mathcal{Q} = 0$, as the entries of $h_0$ are linearly independent over $\\mathbb{F}_q$, and $\\chi_\\delta\\, \\varrho(w_\\delta w_\\delta^\\top) = 0$, as the squares are linearly independent. As $\\mathbf{W}$ is nonzero and $W_U$, $W_V$ determine it, some $W_s$ is nonzero, so some $\\chi_\\delta$ is nonzero. For this $\\delta$, $\\varrho(w_\\delta w_\\delta^\\top) = 0$ for every test: $w_\\delta w_\\delta^\\top$ passes, so the assignment $w_\\delta \\in \\mathcal{V}$ is a witness of $S$ (Definition 4.2).\n\n\\emph{Step 4: the case $u_0 = 0$ does not occur.} If $u_0 = 0$, we show $\\Xi = 0$; then every $W_s$ is zero, so the stack is zero, contrary to the hypothesis. Booleanity reads $\\Xi(h; u_j, u_j) = 0$, and some $u_j$ form a basis $l_1, \\dots, l_d$ of $\\mathbb{F}_q^d$; so by symmetry $\\Xi(l_a; l_b, l_c) = 0$ unless $a$, $b$, $c$ are distinct. Hence $\\Xi = 0$ if $d \\le 2$. If $d = 3$, let $t := \\Xi(l_1; l_2, l_3)$; then $\\Xi(h; l_b, l_c)$ is $t$ times the coordinate of $h$ at $l_a$ for distinct $a$, $b$, $c$, so $\\Xi_s = \\sigma^s(\\Xi_{n-s})$ gives $t\\, h_s = \\sigma^s(t)\\, h_0$ for $s \\in \\{n/2-1, n/2\\}$, as $\\sigma^s(h_{n-s}) = h_0$. So $t = 0$, as $h_{n/2-1}, h_{n/2}$ are not both multiples of $h_0$ (Lemma B.5).",
+   "explain": "A nonzero usable stack of rank at most three without kernel vector has a witness in its row space.",
+   "group": "A",
+   "id": "new:witness"
+  }
+ ],
+ "edges": [
+  {
+   "from": "blob:sampler-search",
+   "to": "new:gp-rank",
+   "kind": "background"
+  },
+  {
+   "from": "blob:stacks-gp",
+   "to": "new:gp-rank",
+   "kind": "background"
+  },
+  {
+   "from": "blob:bound-e",
+   "to": "new:ledger",
+   "kind": "background"
+  },
+  {
+   "from": "blob:sampler-search",
+   "to": "new:range",
+   "kind": "background"
+  },
+  {
+   "from": "blob:msis",
+   "to": "new:pack",
+   "kind": "background"
+  },
+  {
+   "from": "blob:forms-weights",
+   "to": "new:pack",
+   "kind": "background"
+  },
+  {
+   "from": "blob:kernel-short",
+   "to": "new:pack",
+   "kind": "background"
+  },
+  {
+   "from": "blob:admissibility",
+   "to": "new:pack",
+   "kind": "background"
+  },
+  {
+   "from": "lem:lattice-facts",
+   "to": "new:inverse",
+   "kind": "uses",
+   "demand": "(a) restriction to the largest minor is injective and bounds every coordinate; (c) small minors turn a congruence mod q into an integer relation.",
+   "clause": "(a) and (c)",
+   "where": "Proof of B.7, adding a coordinate and the last step."
+  },
+  {
+   "from": "lem:prefix",
+   "to": "new:inverse",
+   "kind": "uses",
+   "demand": "For rank three with a dense fiber, h(Θ) ≤ H_3.",
+   "clause": "(c)",
+   "where": "Proof of B.7."
+  },
+  {
+   "from": "lem:trim",
+   "to": "new:inverse",
+   "kind": "uses",
+   "demand": "Trimming costs at most ε_(tr) of density.",
+   "clause": "whole statement",
+   "where": "Proof of B.7, adding a coordinate."
+  },
+  {
+   "from": "lem:sparse",
+   "to": "new:inverse",
+   "kind": "uses",
+   "demand": "A dense trimmed fiber cannot have full affine dimension: no wrap-around mod q.",
+   "clause": "(a)",
+   "where": "Proof of B.7, adding a coordinate."
+  },
+  {
+   "from": "lem:regularize",
+   "to": "new:inverse",
+   "kind": "uses",
+   "demand": "The normal lattice of the dense fiber lies in a regular saturated lattice that is almost as dense: the lattice for the next prefix.",
+   "clause": "whole statement",
+   "where": "Proof of B.7, adding a coordinate."
+  },
+  {
+   "from": "ext:odl",
+   "to": "new:inverse",
+   "kind": "uses",
+   "demand": "A lattice of rank d has fiber density at most g^(−d).",
+   "clause": "as cited",
+   "where": "Proof of Lemma B.7."
+  },
+  {
+   "from": "ext:cas",
+   "to": "new:inverse",
+   "kind": "uses",
+   "demand": "Minkowski's second theorem and Mahler's lemma: a basis whose norms have product at most h, 2h or 9h.",
+   "clause": "as cited",
+   "where": "Proof of Lemma B.7."
+  },
+  {
+   "from": "blob:stacks-gp",
+   "to": "new:inverse",
+   "kind": "background"
+  },
+  {
+   "from": "blob:kernel-short",
+   "to": "new:inverse",
+   "kind": "background"
+  },
+  {
+   "from": "blob:inverse-conditions",
+   "to": "new:inverse",
+   "kind": "background"
+  },
+  {
+   "from": "blob:lattices",
+   "to": "new:inverse",
+   "kind": "background"
+  },
+  {
+   "from": "blob:trimming",
+   "to": "new:inverse",
+   "kind": "background"
+  },
+  {
+   "from": "lem:moore",
+   "to": "new:witness",
+   "kind": "uses",
+   "demand": "The three consecutive conjugates h_s, s = n/2 − 1, n/2, n/2 + 1, span F_(q^n)^d; and h_(n/2−1), h_(n/2) are not both multiples of h_0.",
+   "clause": "d ≤ 3",
+   "where": "Proof of B.6, Steps 1 and 4."
+  },
+  {
+   "from": "blob:bqs",
+   "to": "new:witness",
+   "kind": "background"
+  },
+  {
+   "from": "blob:tests",
+   "to": "new:witness",
+   "kind": "background"
+  },
+  {
+   "from": "blob:stacks-gp",
+   "to": "new:witness",
+   "kind": "background"
+  },
+  {
+   "from": "blob:forms-weights",
+   "to": "new:witness",
+   "kind": "background"
+  },
+  {
+   "from": "blob:copies-ties",
+   "to": "new:witness",
+   "kind": "background"
+  },
+  {
+   "from": "blob:kernel-short",
+   "to": "new:witness",
+   "kind": "background"
+  }
+ ],
+ "discharge": [
+  {
+   "edge": [
+    "lem:ledger",
+    "thm:extraction"
+   ],
+   "by": [
+    "new:ledger"
+   ],
+   "argument": "The second sentence of Lemma B.2' is the demand: its two premises are admissibility condition (P5) word for word, and its conclusion is E(2Q+2) <= (Q+1)/2^lambda for every integer 0 <= Q < 2^lambda."
+  },
+  {
+   "edge": [
+    "lem:range",
+    "thm:correct"
+   ],
+   "by": [
+    "new:range"
+   ],
+   "argument": "Lemma 5.5' states |r(w) - c_w| <= B for every r in the support of D_g, the sampler of Enc in Appendix A, with c_w the center used by Dec; this is the demanded bound word for word."
+  },
+  {
+   "edge": [
+    "lem:range",
+    "prop:efficiency"
+   ],
+   "by": [
+    "new:range"
+   ],
+   "argument": "Proposition 5.7 is stated for Praxis as specified in Appendix A, whose Enc draws r from the centered sampler D_g and whose Dec uses the center c_w for D_g. For exactly this r and c_w, Lemma 5.5' states the bound E[(r(w) - c_w)^2] <= (g sqrt((N+4)/48) + 3/2)^2 with the same constants as the second case of the base lemma. Jensen's inequality then gives E sqrt|r(w) - c_w| <= (g sqrt((N+4)/48) + 3/2)^(1/2) = O(sqrt(g) N^(1/4)), the expected search of the demand. The dropped case (independent entries, Section 5.1) is not the scheme of Appendix A."
+  },
+  {
+   "edge": [
+    "lem:heavy",
+    "lem:reduction"
+   ],
+   "by": [
+    "new:gp-rank",
+    "new:inverse",
+    "new:pack"
+   ],
+   "argument": "(a) A good mark's stack W is heavy (App. B.4), that is, gp(W) > θ (Definition 4.4). Lemma 4.5'(a) states gp(W) ≤ g^(−rank W) for every stack. If rank W ≥ 4 then gp(W) ≤ g^(−4), as g ≥ 1, and g^(−4) < θ is one of the conditions (P3) of admissible parameters (Sec. 5.4); so W would be light. Hence rank W ≤ 3. (b) The kernel vector v found lies in the row space of the heavy mark stack W, so Lemma 4.5'(b) gives gp(v^⊤) ≥ gp(W) > θ. A kernel vector is nonzero with z(v) = 0 (App. B.3), and z(v) = 0 means φ_e(v) = 0 for every e, with φ_0(v) = v_0 (Definition 5.1); so v_0 = 0. (P3) is the conditions (I1) to (I6) of Lemma B.7', whose statement then gives a short multiple of v. (c) Lemma B.8' states, under (P3), that for a short multiple x of a kernel vector, x̂ solves MSIS for the columns 1, …, ℓ of M, with 0 < ‖x̂‖_∞ ≤ β and A·x̂ = 0 mod q: this is clause (c) of Lemma B.8' word for word."
+  },
+  {
+   "edge": [
+    "lem:heavy",
+    "lem:extractor"
+   ],
+   "by": [
+    "new:gp-rank"
+   ],
+   "argument": "A good mark's stack W is heavy (App. B.4), that is, gp(W) > θ (Definition 4.4). Lemma 4.5'(a) states gp(W) ≤ g^(−rank W) for every stack. If rank W ≥ 4 then gp(W) ≤ g^(−4), as g ≥ 1, and g^(−4) < θ is one of the conditions (P3) of admissible parameters (Sec. 5.4); so W would be light. Hence rank W ≤ 3."
+  },
+  {
+   "edge": [
+    "lem:classification",
+    "lem:extractor"
+   ],
+   "by": [
+    "new:witness"
+   ],
+   "argument": "The statement is the demand: the rank of a stack is by definition the dimension of its row space (Definition 4.4), so the hypotheses (nonzero, usable, rank at most three, no kernel vector in the row space) and the conclusion (a witness of S in the row space) are the same."
+  }
+ ]
 }
