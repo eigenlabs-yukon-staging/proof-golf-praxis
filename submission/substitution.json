@@ -1,9 +1,110 @@
 {
-  "format": "paper-dag-substitution/1",
-  "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
-  "title": "Baseline: the paper as published, nothing removed, nothing added",
-  "remove": [],
-  "add": [],
-  "edges": [],
-  "discharge": []
+ "format": "paper-dag-substitution/1",
+ "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
+ "title": "Slice; rank bound, generic bound and search range each without the clause no proof uses",
+ "remove": [
+  "lem:we-hiding",
+  "lem:rank-one",
+  "prop:hs-dimension",
+  "ext:hs",
+  "lem:gp-rank",
+  "lem:ledger",
+  "lem:range"
+ ],
+ "add": [
+  {
+   "id": "new:gp-rank",
+   "kind": "lemma",
+   "label": "Lemma 4.5'",
+   "name": "Rank bound, inequality only",
+   "statement": "For every stack $\\mathbf{W} = (W_c)_{c \\in C}$:\n\n \n(a) $\\operatorname{gp}(\\mathbf{W}) \\le g^{-\\operatorname{rank} \\mathbf{W}}$;\n(b) $\\operatorname{gp}(v^\\top) \\ge \\operatorname{gp}(\\mathbf{W})$ for every $v$ in the row space of $\\mathbf{W}$.",
+   "proof": "(a) Let $M$ be the matrix of all rows of all $W_c$, of rank $d := \\operatorname{rank} \\mathbf{W}$, and fix $u$. Choose $d$ linearly independent columns of $M$, column $0$ among them unless it is zero. Given the entries of $r$ at the other indices in $[N]$, at most one value modulo $q$ of its entries at the chosen indices solves $M r = u$. Each of the independent entries $r_1, \\dots, r_N$ takes a given value modulo $q$ with probability at most $1/g$, as $g + 1 < q$; so does $r_0$ given all of them. Hence $\\Pr[M r = u] \\le g^{-d}$, as in Odlyzko's lemma \\cite[Lemma 3.1]{NW22}.\n(b) Write $v = \\sum_c W_c^\\top z_c$. Then $v^\\top r = \\sum_c z_c^\\top W_c r$ is a function of $(W_c r)_c$, so it takes one value whenever $(W_c r)_c$ takes its likeliest value, and $\\operatorname{gp}(v^\\top) \\ge \\operatorname{gp}(\\mathbf{W})$.",
+   "group": "A",
+   "explain": "A stack of rank d is guessed with probability at most g^(-d), and a vector of its row space is at least as easy to guess as the stack."
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma B.2'",
+   "name": "Generic bound",
+   "statement": "$E$ is a polynomial of degree two in $u$ with nonnegative coefficients. If $E(2) \\le 2^{-\\lambda}$ and $E(2^{\\lambda+1}) - E(2) \\le 1 - 2^{-\\lambda}$, then $E(2Q + 2) \\le (Q+1)/2^\\lambda$ for every integer $0 \\le Q < 2^\\lambda$.",
+   "proof": "Every term of $E(u)$ is a polynomial in $u$ with nonnegative coefficients, as $L \\ge 1$, of degree two for $N_{\\mathrm{cmp}}(u)$ and at most two otherwise. So $Q \\mapsto E(2Q+2) - (Q+1)/2^\\lambda$ is convex; by the premises it is at most $0$ at $Q = 0$ and at $Q = 2^\\lambda - 1$, where it is $E(2^{\\lambda+1}) - 1$, hence in between.",
+   "explain": "The budget E(u) is a quadratic in u with nonnegative coefficients. If E(2) ≤ 2^(−λ) and E(2^(λ+1)) − E(2) ≤ 1 − 2^(−λ), then E(2Q+2) ≤ (Q+1)/2^λ for every Q < 2^λ. Proof idea: Convexity: the difference is at most zero at both ends of the range, hence in between. Note: E has pieces that no lemma of the paper draws on, among them the “+L” of its first term, most of its fifth term, and its sixth term. The paper says its bounds fit “with terms of E(u) to spare”, because E is the bound of the Lean statement.",
+   "group": "G",
+   "id": "new:ledger"
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma 5.5'",
+   "name": "Search range",
+   "statement": "Let $w \\in \\{0,1\\}^{N+1}$ with $w_0 = 1$, and let $r \\leftarrow \\mathcal{D}_g$ and $c_w$ be the center of Section 5.2. Then $|r(w) - c_w| \\le B$ for every $r$ in the support, and the expectation of $(r(w) - c_w)^2$ is at most $\\bigl( g \\sqrt{(N+4)/48} + 3/2 \\bigr)^2$.",
+   "proof": "Let $a := \\lceil N(g+1)/2 \\rceil$, $\\Sigma := \\sum_{i \\in [N]} r_i$, and $X := r_\\star + \\sum_{i \\in [N]} (w_i - 1/2)\\, r_i$, a sum of independent terms. As $w_0 = 1$ and $r_0 = a + r_\\star - \\lfloor \\Sigma/2 \\rfloor$, $r(w) = r_0 + \\sum_{i \\in [N]} w_i r_i = a + X + \\Sigma/2 - \\lfloor \\Sigma/2 \\rfloor$. Each of $r_\\star, r_1, \\dots, r_N$, uniform on $\\{2, \\dots, g+1\\}$, has mean $(g+3)/2$, is within $(g-1)/2$ of it, and has variance $(g^2-1)/12$. So, as $|w_i - 1/2| = 1/2$, $X$ has mean $\\mu := \\frac{g+3}{2} (1 + \\operatorname{wt}(w) - N/2)$ and variance $(1 + N/4)(g^2-1)/12$, $|X - \\mu| \\le (N+2)(g-1)/4$, and $c_w = \\lfloor a + \\mu \\rfloor$. Hence $r(w) - c_w = (X - \\mu) + \\theta$ with $\\theta := (\\Sigma/2 - \\lfloor \\Sigma/2 \\rfloor) + (a + \\mu - \\lfloor a + \\mu \\rfloor) \\in [0, 3/2)$. So $|r(w) - c_w| \\le (N+2)(g-1)/4 + 3/2 \\le (N+1)(g-1)/2 + (N+1)(g+3)/2 = B$, and by Minkowski's inequality in $L^2$ the square root of the expectation of $(r(w) - c_w)^2$ is at most $\\sqrt{(N+4)(g^2-1)/48} + 3/2 \\le g \\sqrt{(N+4)/48} + 3/2$.",
+   "explain": "|r(w) − c_w| ≤ B for every r in the support of the sampler, and E[(r(w) − c_w)²] ≤ (g·√((N+4)/48) + 3/2)² for the centered sampler. Proof idea: r(w) − c_w is a sum of independent centered terms plus two rounding errors.",
+   "group": "C",
+   "id": "new:range"
+  }
+ ],
+ "edges": [
+  {
+   "from": "blob:sampler-search",
+   "to": "new:gp-rank",
+   "kind": "background"
+  },
+  {
+   "from": "blob:stacks-gp",
+   "to": "new:gp-rank",
+   "kind": "background"
+  },
+  {
+   "from": "blob:bound-e",
+   "to": "new:ledger",
+   "kind": "background"
+  },
+  {
+   "from": "blob:sampler-search",
+   "to": "new:range",
+   "kind": "background"
+  }
+ ],
+ "discharge": [
+  {
+   "edge": [
+    "lem:gp-rank",
+    "lem:heavy"
+   ],
+   "by": [
+    "new:gp-rank"
+   ],
+   "argument": "The demand asks for the inequality gp(W) <= g^(-rank W) of part (a), so that rank >= 4 gives gp <= g^(-4) < theta, and for part (b), gp(v^T) >= gp(W) for v in the row space. Both are parts (a) and (b) of the new statement, word for word."
+  },
+  {
+   "edge": [
+    "lem:ledger",
+    "thm:extraction"
+   ],
+   "by": [
+    "new:ledger"
+   ],
+   "argument": "The second sentence of Lemma B.2' is the demand: its two premises are admissibility condition (P5) word for word, and its conclusion is E(2Q+2) <= (Q+1)/2^lambda for every integer 0 <= Q < 2^lambda."
+  },
+  {
+   "edge": [
+    "lem:range",
+    "thm:correct"
+   ],
+   "by": [
+    "new:range"
+   ],
+   "argument": "Lemma 5.5' states |r(w) - c_w| <= B for every r in the support of D_g, the sampler of Enc in Appendix A, with c_w the center used by Dec; this is the demanded bound word for word."
+  },
+  {
+   "edge": [
+    "lem:range",
+    "prop:efficiency"
+   ],
+   "by": [
+    "new:range"
+   ],
+   "argument": "Proposition 5.7 is stated for Praxis as specified in Appendix A, whose Enc draws r from the centered sampler D_g and whose Dec uses the center c_w for D_g. For exactly this r and c_w, Lemma 5.5' states the bound E[(r(w) - c_w)^2] <= (g sqrt((N+4)/48) + 3/2)^2 with the same constants as the second case of the base lemma. Jensen's inequality then gives E sqrt|r(w) - c_w| <= (g sqrt((N+4)/48) + 3/2)^(1/2) = O(sqrt(g) N^(1/4)), the expected search of the demand. The dropped case (independent entries, Section 5.1) is not the scheme of Appendix A."
+  }
+ ]
 }
