@@ -1,9 +1,320 @@
 {
   "format": "paper-dag-substitution/1",
   "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
-  "title": "Baseline: the paper as published, nothing removed, nothing added",
-  "remove": [],
-  "add": [],
-  "edges": [],
-  "discharge": []
+  "title": "Target slice and direct algebraic bounds",
+  "remove": [
+    "lem:we-hiding",
+    "lem:rank-one",
+    "prop:hs-dimension",
+    "ext:hs",
+    "lem:ledger",
+    "lem:lattice-facts",
+    "lem:range",
+    "lem:gp-rank",
+    "lem:qap",
+    "lem:classification",
+    "lem:half",
+    "ext:br",
+    "lem:inverse",
+    "lem:regularize",
+    "lem:sparse",
+    "lem:prefix",
+    "lem:trim",
+    "ext:odl"
+  ],
+  "add": [
+    {
+      "id": "new:ledger",
+      "kind": "lemma",
+      "label": "Direct ledger",
+      "name": "Generic bound",
+      "statement": "Under (P5), E(2Q+2) ≤ (Q+1)/2^λ for every integer 0 ≤ Q < 2^λ.",
+      "proof": "The coefficient of u² in E is (θ+ε_f)/2+9ε_f/2 ≥ 0, so E is convex. By (P5) its values at 2 and 2^{λ+1} are at most 2^{-λ} and 1, respectively. The affine function u/2^{λ+1} has exactly these endpoint values, so it bounds E from above on the interval by convexity. Set u=2Q+2.",
+      "explain": "Direct derivation from the linked premises."
+    },
+    {
+      "id": "new:range",
+      "kind": "lemma",
+      "label": "Direct range",
+      "name": "Search range",
+      "statement": "For either sampler and its corresponding center c_w in the linked definition, let w be binary with w_0=1 and put k=1+wt(w). Throughout the support |r(w)−c_w|≤B. The second moment of r(w)−c_w is at most (g√(k/12)+1/2)² for independent coordinates and (g√((N+4)/48)+3/2)² for the centered sampler.",
+      "proof": "Put m=(g+3)/2 and let Y denote a uniform draw from {2,…,g+1} minus m. Summing (j−(g−1)/2)² over 0≤j<g gives Var(Y)=(g²−1)/12, and |Y|≤(g−1)/2. For a sum Z of independent copies with real coefficients a_i and any rounding error of magnitude ≤b, the pointwise bound is (g−1)Σ|a_i|/2+b and the L² bound is g√(Σa_i²/12)+b, by the triangle inequality and independence. In the independent sampler the deviation has k coefficients 1 and rounding error km−⌊km⌋≤1/2 because 2km is integral. In the centered sampler the identity −⌊s/2⌋=−s/2+(s/2−⌊s/2⌋), for s=Σr_i over 1≤i≤N, gives coefficients 1 on the star draw and w_i−1/2 on the others. The rounding error is the sum of s/2−⌊s/2⌋ and the fractional part of the unrounded center, hence is ≤3/2. The coefficient norms give the stated squared L² bounds. The pointwise bounds are k(g−1)/2+1/2 and (N+2)(g−1)/4+3/2, each at most (N+1)(g+1)=B.",
+      "explain": "Direct derivation from the linked premises."
+    },
+    {
+      "id": "new:gp-rank",
+      "kind": "lemma",
+      "label": "Direct gp-rank",
+      "name": "Rank bound",
+      "statement": "For either sampler and every stack W of rank d, gp(W)≤g^{−d}. For every v in its row space, gp(vᵀ)≥gp(W).",
+      "proof": "Stack the rows as M. If its column 0 is nonzero, include that column in a column basis; otherwise omit it. Once the coordinates outside that basis are fixed, the equation Mr=u determines the pivot coordinates uniquely modulo q. If 0 is outside the basis, it need not be conditioned on, since it has zero column. The positive-index pivots each hit their prescribed values with independent probability 1/g or zero, and if 0 is a pivot its conditional probability given all positive indices is at most 1/g. Thus each fiber has probability ≤g^{−d}. Since vᵀr is a linear image of Mr, the largest fiber of Mr maps to one value of vᵀr, giving the other inequality.",
+      "explain": "Direct derivation from the linked premises."
+    },
+    {
+      "id": "new:qap",
+      "kind": "lemma",
+      "label": "Direct qap",
+      "name": "QAP criterion",
+      "statement": "For any admissible evaluation points and symmetric W, passage is equivalent to each of the identities\nP_W−W_{00} L_ρ=h Z(X−ρ)+Z_0 R,\nP_W=h′ Z+Z_0 R,\nwhen the remainder R is allowed. In either identity the remainder is R_W, the interpolant of degree below ν n_c of P_W/Z_0 on the cosets; the quotients have deg h<D−1 and deg h′<D. For a witness these identities apply to wwᵀ with W_{00}=1.",
+      "proof": "For either identity, evaluation on the cosets forces R=R_W because Z vanishes there and Z_0 does not. The sums of its values there are the constraint tests by the QAP table. For exponents divisible by ν, the matrix of coset sums is ν times the Vandermonde matrix on the distinct νth powers of the coset representatives; the other exponents give zero. With no cosets the allowed remainder is zero and there are no constraint tests. Otherwise invertibility makes the constraint tests equivalent to R_W being allowed. Subtract Z_0 R_W from P_W. On the roots of Z the difference vanishes except possibly at d_j for 1≤j≤N, where its values are the Booleanity tests. Subtracting W_{00}L_ρ adds the root ρ without changing those values. Hence divisibility by the respective vanishing polynomials is equivalent to the remaining tests. The numerators have degree ≤2D−2 since Z_0 R_W and L_ρ have degree ≤D−1, so division by polynomials of degrees D and D−1 yields the claimed bounds. A witness passes the tests by its defining equations.",
+      "explain": "Direct derivation from the linked premises."
+    },
+    {
+      "id": "new:classification",
+      "kind": "lemma",
+      "label": "Direct classification",
+      "name": "Classification",
+      "statement": "A nonzero usable stack with row space of dimension at most three and no kernel vector has a witness in its row space.",
+      "proof": "Work over K=F_{q^n}. Let U have an F_q-basis of the row space as columns, d its column count, u_j the transpose of its row j, and h_s=Uᵀσ^s(z). No kernel vector means the entries of h_0 are F_q-independent. For s=a,b,c with a=n/2−1,b=n/2,c=n/2+1, assemble W_s from the U-weight coefficients, V-weight coefficients, and the σ^c conjugate of the U assembly, respectively. These have a unique expression W_s=UM_sUᵀ with M_s symmetric: applying a left inverse of U on both sides gives M_s, and the row and column spaces ensure the reconstruction. The ties imply M_s h_t=M_t h_s. The h_s span K^d. Thus h_s↦M_s extends linearly, since any relation Σ_s λ_s h_s=0 gives (Σ_s λ_s M_s)h_t=0 for every t. Its trilinear form T(h,u,v)=uᵀM(h)v is symmetric by matrix symmetry and the ties on spanning arguments. The tests give T(h,u_j,u_j−u_0)=0 for every h, by linearity from h_s. Writing M_s for M(h_s), we have M_a=σ^a(M_c) and M_b=σ^b(M_b) by the conjugacy and even-degree V assembly.\nIf u_0=0, choose d of the u_j as a basis. T vanishes on basis triples with repetitions, so can be nonzero only for d=3, with one independent value t on the triples of distinct indices. In those basis coordinates the off-diagonal evaluations of M_s are t times the three coordinates of h_s. The two conjugacy identities, using σ^a(h_c)=σ^b(h_b)=h_0 and the basis over F_q, imply t h_a=σ^a(t)h_0 and t h_b=σ^b(t)h_0. The spanning condition for three vectors in dimension three rules out both h_a,h_b proportional to h_0. Thus t=0, and T=0 would make the stack zero.\nWith u_0≠0, complete it to a basis u_0,l_1,…,l_{d−1} from the rows. For each binary tuple δ of length d−1 let p_δ be the dual-coordinate vector taking values 1,δ_1,…,δ_{d−1} on this basis, and write w_δ=Up_δ and z_δ=z(w_δ)≠0. The test relations replace each repeated nonzero index of a basis triple by index 0 until distinct; symmetry then makes each triple's value depend only on its set A of nonzero indices. The cubes (hᵀp_δ)(uᵀp_δ)(vᵀp_δ) have entries ∏_{j∈A}δ_j on these triples. The matrix of these entries, indexing tuples by their support B, is the subset incidence matrix 1_{A⊆B}, triangular with unit diagonal under cardinality order. Hence T is a linear combination of these cubes with coefficients c_δ∈K. Pairs also realize all subsets A since d−1≤2; the same matrix proves independence of the squares p_δp_δᵀ.\nIt follows that M_s=Σ_δ c_δ σ^s(z_δ)p_δp_δᵀ. Comparing square coefficients in the two conjugacy identities shows c_δ/z_δ fixed by σ^a and σ^b, hence by σ since b−a=1. Write χ_δ=c_δ/z_δ∈F_q. Now take any linear passage test L over F_q. It vanishes on every W_s by vanishing on the stack coefficients. Consequently h_0ᵀQh_s=0, where Q=Σ_δ χ_δ L(w_δw_δᵀ)p_δp_δᵀ is over F_q. Spanning gives h_0ᵀQ=0, and F_q-independence of the entries of h_0 gives Q=0. Independence of the squares gives χ_δ L(w_δw_δᵀ)=0 for each δ. Some χ_δ is nonzero, since otherwise all assemblies and thus the stack vanish. The corresponding w_δ has coordinate 0 equal to 1 and its moment matrix passes every test, hence it is a witness.",
+      "explain": "Direct derivation from the linked premises."
+    },
+    {
+      "id": "new:half",
+      "kind": "lemma",
+      "label": "Direct half",
+      "name": "Factor one half",
+      "statement": "In the experiment of Definition 3.6, $\\Pr[\\, b' = b \\wedge \\mathsf{Fail} \\,] \\le \\frac12 + \\frac14 (f_0 + f_1)$.",
+      "proof": "Fix the shared coins in the uniform-masked-message game. By the coupling, either both bits lead to a target query or neither does; off the target event the same output guesses at most one bit correctly. Hence, putting p=Pr[Tgt], the off-target contribution to success with failure is at most (1−p)/2. On target it is at most f=(f_0+f_1)/2≤p, the probability of target with failure. Their sum is ≤1/2+f/2.",
+      "explain": "Direct derivation from the linked premises."
+    },
+    {
+      "id": "new:inverse",
+      "kind": "lemma",
+      "label": "Direct inverse",
+      "name": "Inverse theorem",
+      "statement": "Under (I1)–(I6) in the linked inverse conditions, every nonzero v∈F_q^{N+1} with v_0=0 and gp(vᵀ)>θ has a short multiple x with x_0=0.",
+      "proof": "Use the full inverse conditions throughout. Write ε=ε_tr and μ=μ_tr. Work with the box of independently uniform coordinates in {2,…,g+1} and use the notation of lattice height, density and trimming. For a rank-e lattice, choosing e independent rows of its basis determines their box coordinates uniquely from the target fiber and the remaining coordinates. Each such integer tuple has conditional probability at most g^{−e}.\n\nTrimming loss. For a lattice Θ of rank d∈{1,2,3} with basis B, a centered uniform box coordinate X has moment generating function sinh(gt/2)/(g sinh(t/2)) by the finite geometric sum (with value 1 at zero). It is bounded by sinh(gt/2)/(gt/2)≤exp(g²t²/24): the first inequality is sinh(u)/u≥1 for real u, and the second follows termwise from (2j+1)!≥6^j j!. Therefore the centered projected vector Y=Bᵀr_I−y_Θ satisfies E exp(uᵀY)≤exp(uᵀΣ_Θu/2) by independence. Set Z=Σ_Θ^{−1/2}Y and let G be an independent standard normal of dimension d. Integrating first in G gives E exp(99‖Z‖²/200)=E exp(√(99/100)GᵀZ). Integrating first in Z bounds this by E exp(99‖G‖²/200)=10^d. Markov's inequality at R_tr² gives deleted mass at most 10^d exp(−99R_tr²/200)≤ε by (I2) for d≤3.\n\nCoordinate and lift facts. If B is a basis matrix and J rows of a largest minor, Cramer's rule bounds the coefficients of B_i B_J^{-1} by 1 in magnitude: they are ratios of maximal minors, or zero. Thus restriction onto J is injective on the span and bounds every coordinate by the ℓ₁ norm there. For a saturated lattice, extending B to a unimodular matrix gives an integral left inverse from the first rows of the inverse matrix. Transposing makes Bᵀ onto the integer codomain. For an integral matrix Δ of rank k with all k-minors below q in magnitude, use Smith normal form UΔV=S. Its nonzero k-minor survives mod q, so all k nonzero diagonal entries of S are units mod q. If cᵀΔ≡0, the first k entries of cᵀU^{-1} are multiples of q. Zero those entries and multiply by U; the result is an integral relation with residue cᵀ.\n\nPrefix bounds. Take a saturated rank-d lattice Θ and put a largest minor J first in the coordinate order. For d≤k≤|I| let Θ_k be the lattice of integer points in the real span of the restricted basis columns, with height h_k and density m_k.\nFor a basis B of Θ, denote its first k rows by B_k and write B_k=Y_k C_k with Y_k a saturated prefix basis and C_k an integral nonsingular matrix. The transpose image G_k=B_kᵀ Z^k has index |det C_k| by surjectivity of Y_kᵀ. Each maximal minor scales by |det C_k|, so J remains maximal and h_k[Z^d:G_k]=h(Θ). The first prefix has full span and saturation Z^d, with height 1 and point fibers of mass g^{−d}; the last lattice is Θ. Adding the next row enlarges G_k by its cyclic class of order s_k, so its order equals h_{k+1}/h_k. In a fiber of B_{k+1}ᵀ the new coordinate is in at most one residue class modulo s_k, since the old contribution lies in G_k. Since C_kᵀ is injective, the old fiber definitions agree, giving conditional density ≤m_k for each of the at most ⌈g/s_k⌉ choices. Hence m_{k+1}≤m_k⌈g/s_k⌉/g, and s_k≥g forces a single new-coordinate value.\nFor a step with s=s_k<g, we show m_{k+1}^b h_{k+1}^{b−1}≤m_k^b h_k^{b−1}. For s=1 this follows from the density bound. For 2≤s<g it suffices that 1+s/g≤s^{1/b}, since ⌈g/s⌉/g≤(1+s/g)/s. For s≥2^b the left side is ≤2≤s^{1/b}. For 2≤s≤2^b it suffices to replace g by 2^b and use concavity of s^{1/b}−1−s/2^b, zero at 2^b and positive at 2 by (ln 2)/b>2^{1−b} for b≥7 (true at 7 and b/2^{b−1} decreases). Thus m_{k+1}≤m_k s^{−1+1/b}; raising to b and multiplying by h_{k+1}^{b−1} proves the product bound.\nFor d=3, put h=h(Θ), and multiply the density factors for the r steps with s_k>1, whose product of height ratios is h. The upper product ∏(1/s_k+1/g) exceeds ∏1/s_k=1/h by at most r(1/2+1/g)^{r−1}/g: telescope over the r factor replacements, bounding all other factors by 1/2+1/g. For r=0 there is zero increase. For r≥1 the bound is at most (1+2/g)/g, since the numerator decreases after r=2 by the consecutive ratio (1+1/r)(1/2+1/g)<1 for r≥2. Thus m(Θ)≤g^{−3}(1/h+ξ_tr/g)≤g^{−3}ξ_tr(1/h+1/g). With m(Θ)≥μ_tr this gives h≤H_3 by (I2), and m(Θ)h≤g^{−3}ξ_tr(1+H_3/g)≤Γ_3/g³ by (I4).\n\nSparse images. A nonempty box set F on I and one additional coordinate is trimmed by a lattice Θ on I of rank d∈{1,2,3}, with |I|≤N. Use Φ(r)=(Bᵀr_I,r_{i′}). In case (a), the image has affine dimension d+1 and lies in an index-q coset. We will bound Pr[F] by Λ_d g^d h(Θ)m(Θ)/q. In case (b), the normal lattice F^⊥ has rank d′ between 1 and d−1, a largest minor at J⊆I, and its restrictions to I lie in the span of Θ. We will bound Pr[F]h(F^⊥) by Λ_{d−d′}g^{d−d′}h(Θ)m(Θ).\nEvery image point of Φ carries box mass at most m(Θ)/g, by independence of the extra coordinate. We bound the number of image points by projecting to k coordinates, with k=d+1 in (a) and k=d+1−d′ in (b).\nIn (b), if Y is a basis of F^⊥, its rows Y_J are invertible and its restriction to I is in the column span of B, so B_J has rank d′. The integral kernel of B_J is saturated; extend a basis of it to a unimodular basis of Z^d with the kernel columns last. Trimming is basis-invariant; use the resulting B=(B_1,B_2) to define Φ, with (B_2)_J=0 and (B_1)_J square invertible. The transpose of Φ maps a normal (a,t) to (Ba,t). This injective map covers the real normal space of F by the restriction hypothesis, so Φ(F) has affine dimension k and normal lattice of rank d′. Split a basis matrix V of the image normal lattice into its first d′ rows V_1 and its remaining k rows V_2. At J the pullbacks give (B_1)_J V_1=Y_J C with C integral nonsingular, so |det(B_1)_J|·|det V_1|≥h(F^⊥).\nProjection drops the first d′ coordinates. It is injective on differences in ker Vᵀ by invertibility of V_1. The projected integral differences lie in the kernel of x↦V_2ᵀx mod V_1ᵀZ^{d′}, a subgroup of index δ=|det V_1| since VᵀZ^{d+1}=Z^{d′}. In (a) use the identity projection, δ=q, B_2=B, J=∅ and an empty first minor of determinant 1.\nThus the projected image has affine dimension k in an index-δ coset. Its convex hull contains a simplex of volume ≥δ/k! by the integral determinant in a coset lattice basis. The lattice point bound in that basis yields count ≤k!·vol/δ+k≤(k+1)!·vol/δ, where vol is the hull volume. The hull lies inside the product of the projected trimming ellipsoid and the extra interval of length ≤g. The projection onto the B_2 coordinates has volume vol(Ball_{k−1})(g R_tr/√12)^{k−1}√det(B_2ᵀB_2), by taking the singular values of the projected ellipsoid map. Here Ball_j is the Euclidean unit ball of dimension j. By Cauchy–Binet and (B_2)_J=0, multiplying the square root by |det(B_1)_J| gives at most √C(N,k−1) h(Θ), since each corresponding block minor of B has magnitude ≤h(Θ); C denotes the binomial coefficient.\nWriting j=k−1, the mass bound is therefore Pr[F]·δ·|det(B_1)_J|≤m(Θ)h(Θ)g^j (j+2)! vol(Ball_j)R_tr^j √[N^j/(12^j j!)]. For j=1,2,3 the constants multiplying R_tr^j N^{j/2} are 2√3, √2π, and 20π/(9√2), respectively, all within Λ_j by (I3). Substituting the index in (a) or the height inequality in (b) proves both bounds.\n\nRegularization. For a saturated rank-d lattice on ≤N indices, d∈{1,2,3}, and m(Θ)≥μ+(3−d)ε, we will find a regular saturated superlattice of rank at most three losing at most (3−d)ε in density.\nInduct downward on d. The dense rank-three bound includes regularity, proving d=3. For d≤2 take the prefix lattices Θ_k from the largest minor J of Θ, with densities m_k, heights h_k and height ratios s_k. Since m_k is nonincreasing, every m_k≥μ+(3−d)ε.\nIn increasing prefix order choose a largest fiber F_k, trimming by the preceding regular superlattice whenever that was constructed. Thus Pr[F_k]≥m_k−ε. Its saturated normal lattice contains Θ_k. If the containment is strict, its rank e exceeds d and is at most three by Pr[F_k]>g^{-4} and the rank fiber bound. Its density is at least μ+(2−d)ε≥μ+(3−e)ε. Use induction to choose a regular superlattice R_k of that normal lattice with density ≥m_k−ε−(3−e)ε≥m_k−(3−d)ε. If this occurs at the final prefix, R_k proves the claim.\nOtherwise let j be the last prefix with a constructed R_j, or d−1 if none. For k≥j+1 before the final prefix, s_k≥g would make the new coordinate constant on the fiber and hence on F_{k+1}; its unit vector would be in F_{k+1}^⊥=Θ_{k+1} while vanishing on J, impossible. So the prefix bound makes m_k(m_kh_k)^{b−1} nonincreasing from k=j+1. It suffices to bound it there by μ(Γ_d/g^d)^{b−1}, because final density is ≥μ. When j=d−1 its value there is g^{-db}; the needed inequality is Γ_d^{b−1}≥g^{-d}/μ.\nOtherwise put e=rank R_j. Apply the sparse transition bound with R_j, the next coordinate, and F_{j+1}. The normal lattice of F_{j+1} is Θ_{j+1} of rank d<e, largest minor at J in the old prefix, and its restrictions belong to the span of Θ_j and thus of R_j. Also F_{j+1} was trimmed by R_j. Therefore Pr[F_{j+1}] h_{j+1}≤Λ_{e−d}Γ_e/g^d by regularity. Since m_{j+1}≥μ, (I4) gives m_{j+1}≤A_inv Pr[F_{j+1}]. Meanwhile m_{j+1}≤m_j≤Pr[F_j]+ε≤g^{−d−1}+ε≤μP_d^{b−1} by (I4), using the strict normal rank increase at j. Multiplying these two estimates gives m_{j+1}(m_{j+1}h_{j+1})^{b−1}≤μ(A_inv Λ_{e−d}Γ_e P_d/g^d)^{b−1}≤μ(Γ_d/g^d)^{b−1} by (I4). Thus Θ itself is regular in this case.\n\nSupport induction and short representative.\nRelabel the positive coordinates so the nonzero ones of v come first, say j=1,…,m. The scalar vᵀr only uses independent uniform coordinates. The largest atom cannot increase on adding an independent summand, by conditioning on that summand; moreover each nonzero coefficient gives an atom bound 1/g. Thus each nonempty prefix of the support has largest atom in (θ,1/g].\nInductively maintain a saturated regular lattice Θ on the first i coordinates, of rank d∈{1,2,3}, with v_{[i]} in its reduction and m(Θ)≥gp(v_{[i]}ᵀ)−3ε>μ. The first lattice is Z, with height 1 and density 1/g; Γ_1≥1 by (I4) and μ<1/g. At every step h=h(Θ)≤H_d, by regularity for d≤2 and the dense rank-three height bound for d=3.\nTo extend, project Θ onto a largest minor J. This is an isomorphism onto a lattice of determinant h, and each lifted infinity norm is bounded by the projected ℓ₁ norm. The ℓ₁ unit ball has volume 2^d/d!, so Minkowski’s second theorem bounds the product of successive minima by d!h. Mahler’s bound gives a basis with ℓ₁ lengths ≤λ₁, λ₂ and (3/2)λ₃, for the respective successive minima that are present. Hence the lifted basis B has product of column infinity norms ≤a_d h with (a_1,a_2,a_3)=(1,2,9). Write v_{[i]}≡Bc′ and set c=(c′,v_{i+1}), Φ(r)=(Bᵀr_{[i]},r_{i+1}). Trim a largest modular fiber cᵀΦ(r)=t by Θ to obtain F with density at least gp(v_{[i+1]}ᵀ)−ε>μ. Its image lies in a coset of index q because v_{i+1}≠0. If the image had full affine dimension d+1, the sparse bound and regularity would give density ≤Λ_d g^d h m(Θ)/q≤Λ_d Γ_d/q<μ by (I5).\nTake the matrix of differences of the image points, of rank k≤d. The length of the trimming ellipsoid along coordinate j in the sense of maximum minus minimum is 2R_tr√[(Σ_Θ)_{jj}] by Cauchy–Schwarz in the ellipsoid metric. This is at most T_tr‖B_j‖_∞ by its covariance formula, with B_j the j-th column. The last coordinate differences are bounded by g−1≤T_tr. The determinant expansion bounds every k-minor by d!T_tr^d ∏_j‖B_j‖_∞, since the norms and T_tr are at least one. This is at most d!a_d H_d T_tr^d<q by (I5). The small-minor lift above yields an integral relation u on those differences reducing to c. Then (Bu_{[d]},u_{d+1}) is constant as a linear form on F, so its residue v_{[i+1]} lies in the reduction of F^⊥. The rank of F^⊥ is positive because that residue is nonzero, and at most three because Pr[F]>μ>g^{-4} and a rank-e lattice fiber has density at most g^{-e}. Also m(F^⊥)≥Pr[F]>θ−ε≥μ+2ε. Regularization supplies a saturated regular superlattice losing at most 2ε, proving the invariant.\nFor the last lattice, choose a largest minor at J and z_0 with Bz_0≡v_{[m]}. The coefficient lattice of z with z mod q in the line of z_0 has index q^{d−1}; z_0 mod q is nonzero since v_{[m]} is nonzero. Mapping by B_J gives determinant hq^{d−1}. By (I6) and integrality of h, d!hq^{d−1}≤β^d. The closed ℓ₁ ball of radius β has volume (2β)^d/d!, so shrinking it to the volume threshold if needed and applying Minkowski gives a nonzero lattice point B_Jz therein. The coordinate bound at J gives 0<‖Bz‖_∞≤β<q, so Bz reduces to a nonzero multiple of v_{[m]}. Extend by zeros and undo the relabeling, giving x_0=0.",
+      "explain": "Direct derivation from the linked premises."
+    }
+  ],
+  "edges": [
+    {
+      "from": "blob:bound-e",
+      "to": "new:ledger",
+      "kind": "background"
+    },
+    {
+      "kind": "background",
+      "to": "new:ledger",
+      "from": "blob:admissibility"
+    },
+    {
+      "from": "blob:sampler-search",
+      "to": "new:range",
+      "kind": "background"
+    },
+    {
+      "from": "blob:sampler-search",
+      "to": "new:gp-rank",
+      "kind": "background"
+    },
+    {
+      "from": "blob:stacks-gp",
+      "to": "new:gp-rank",
+      "kind": "background"
+    },
+    {
+      "from": "ext:aur",
+      "to": "new:qap",
+      "kind": "uses",
+      "demand": "X^k sums over a coset of order ν to ν·δ^k if ν divides k, and to zero otherwise."
+    },
+    {
+      "from": "blob:tests",
+      "to": "new:qap",
+      "kind": "background"
+    },
+    {
+      "from": "blob:qap",
+      "to": "new:qap",
+      "kind": "background"
+    },
+    {
+      "from": "lem:moore",
+      "to": "new:classification",
+      "kind": "uses",
+      "demand": "For h_0 in F_(q^n)^d with F_q-independent entries and d≤min(3,n), the three conjugates at n/2−1,n/2,n/2+1 span F_(q^n)^d."
+    },
+    {
+      "from": "blob:bqs",
+      "to": "new:classification",
+      "kind": "background"
+    },
+    {
+      "from": "blob:tests",
+      "to": "new:classification",
+      "kind": "background"
+    },
+    {
+      "from": "blob:stacks-gp",
+      "to": "new:classification",
+      "kind": "background"
+    },
+    {
+      "from": "blob:forms-weights",
+      "to": "new:classification",
+      "kind": "background"
+    },
+    {
+      "from": "blob:copies-ties",
+      "to": "new:classification",
+      "kind": "background"
+    },
+    {
+      "from": "blob:kernel-short",
+      "to": "new:classification",
+      "kind": "background"
+    },
+    {
+      "from": "blob:we",
+      "to": "new:half",
+      "kind": "background"
+    },
+    {
+      "from": "blob:bound-e",
+      "to": "new:half",
+      "kind": "background"
+    },
+    {
+      "from": "blob:symbolic-game",
+      "to": "new:half",
+      "kind": "background"
+    },
+    {
+      "from": "blob:inverse-conditions",
+      "to": "new:inverse",
+      "kind": "background"
+    },
+    {
+      "from": "blob:kernel-short",
+      "to": "new:inverse",
+      "kind": "background"
+    },
+    {
+      "from": "blob:lattices",
+      "to": "new:inverse",
+      "kind": "background"
+    },
+    {
+      "from": "blob:stacks-gp",
+      "to": "new:inverse",
+      "kind": "background"
+    },
+    {
+      "from": "blob:trimming",
+      "to": "new:inverse",
+      "kind": "background"
+    },
+    {
+      "from": "ext:bli",
+      "to": "new:inverse",
+      "kind": "uses",
+      "demand": "A convex body of affine dimension k holds at most k!·vol + k lattice points."
+    },
+    {
+      "from": "ext:cas",
+      "to": "new:inverse",
+      "kind": "uses",
+      "demand": "A basis of a saturated lattice extends to an ambient unimodular basis. Minkowski’s second theorem and Mahler’s basis bound give the basis norm product bounds h, 2h and 9h at ranks one, two and three."
+    },
+    {
+      "from": "ext:mink",
+      "to": "new:inverse",
+      "kind": "uses",
+      "demand": "A symmetric convex body of volume 2^d·det contains a nonzero lattice point: the short multiple."
+    }
+  ],
+  "discharge": [
+    {
+      "edge": [
+        "lem:ledger",
+        "thm:extraction"
+      ],
+      "by": [
+        "new:ledger"
+      ],
+      "argument": "The bound is stated with exactly (P5) and the stipulated range of Q."
+    },
+    {
+      "edge": [
+        "lem:range",
+        "thm:correct"
+      ],
+      "by": [
+        "new:range"
+      ],
+      "argument": "The deterministic bound on the whole support is the first conclusion."
+    },
+    {
+      "edge": [
+        "lem:range",
+        "prop:efficiency"
+      ],
+      "by": [
+        "new:range"
+      ],
+      "argument": "The second moments match both sampler bounds. Jensen bounds the expected square root of the absolute deviation by the fourth root of its second moment, which is O(√g·N^{1/4}) for N≥1."
+    },
+    {
+      "edge": [
+        "lem:gp-rank",
+        "lem:heavy"
+      ],
+      "by": [
+        "new:gp-rank"
+      ],
+      "argument": "Apply the rank bound with d≥4 and the row-space inequality to the kernel vector, using heaviness and the stipulated g^{−4}<θ."
+    },
+    {
+      "edge": [
+        "lem:qap",
+        "lem:honest"
+      ],
+      "by": [
+        "new:qap"
+      ],
+      "argument": "The witness specialization gives both identities with the same allowed remainder and quotients of degrees below D."
+    },
+    {
+      "edge": [
+        "lem:qap",
+        "lem:view"
+      ],
+      "by": [
+        "new:qap"
+      ],
+      "argument": "For any cell, the corresponding division identity implies passage; the subtracted L_ρ coefficient in the key identity equals W_{00} by evaluation at ρ."
+    },
+    {
+      "edge": [
+        "lem:classification",
+        "lem:extractor"
+      ],
+      "by": [
+        "new:classification"
+      ],
+      "argument": "This is the existence statement used for the nonzero usable stack with rank ≤3 and no kernel vector."
+    },
+    {
+      "edge": [
+        "lem:half",
+        "cor:ext-error"
+      ],
+      "by": [
+        "new:half"
+      ],
+      "argument": "The probability and both per-bit failure terms are those of the demanded inequality."
+    },
+    {
+      "edge": [
+        "lem:inverse",
+        "lem:heavy"
+      ],
+      "by": [
+        "new:inverse"
+      ],
+      "argument": "Under the inverse conditions in (P3), the stated short multiple has integer coordinates bounded by β, coordinate zero equal to zero, and residue equal to c v for some nonzero field scalar c."
+    }
+  ],
+  "replaces": {}
 }
