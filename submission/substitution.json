@@ -1,9 +1,248 @@
 {
-  "format": "paper-dag-substitution/1",
-  "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
-  "title": "Baseline: the paper as published, nothing removed, nothing added",
-  "remove": [],
-  "add": [],
-  "edges": [],
-  "discharge": []
+ "format": "paper-dag-substitution/1",
+ "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
+ "title": "Slice; correctness proved in one computation; heavy-stacks glue reduced to its packing clause; rank bound and generic bound without unused clauses",
+ "remove": [
+  "lem:we-hiding",
+  "lem:rank-one",
+  "prop:hs-dimension",
+  "ext:hs",
+  "lem:gp-rank",
+  "lem:ledger",
+  "lem:honest",
+  "lem:range",
+  "thm:correct",
+  "lem:heavy"
+ ],
+ "add": [
+  {
+   "id": "new:gp-rank",
+   "kind": "lemma",
+   "label": "Lemma 4.5'",
+   "name": "Rank bound, inequality only",
+   "statement": "For every stack $\\mathbf{W} = (W_c)_{c \\in C}$:\n\n \n(a) $\\operatorname{gp}(\\mathbf{W}) \\le g^{-\\operatorname{rank} \\mathbf{W}}$;\n(b) $\\operatorname{gp}(v^\\top) \\ge \\operatorname{gp}(\\mathbf{W})$ for every $v$ in the row space of $\\mathbf{W}$.",
+   "proof": "(a) Let $M$ be the matrix of all rows of all $W_c$, of rank $d := \\operatorname{rank} \\mathbf{W}$, and fix $u$. Choose $d$ linearly independent columns of $M$, column $0$ among them unless it is zero. Given the entries of $r$ at the other indices in $[N]$, at most one value modulo $q$ of its entries at the chosen indices solves $M r = u$. Each of the independent entries $r_1, \\dots, r_N$ takes a given value modulo $q$ with probability at most $1/g$, as $g + 1 < q$; so does $r_0$ given all of them. Hence $\\Pr[M r = u] \\le g^{-d}$, as in Odlyzko's lemma \\cite[Lemma 3.1]{NW22}.\n(b) Write $v = \\sum_c W_c^\\top z_c$. Then $v^\\top r = \\sum_c z_c^\\top W_c r$ is a function of $(W_c r)_c$, so it takes one value whenever $(W_c r)_c$ takes its likeliest value, and $\\operatorname{gp}(v^\\top) \\ge \\operatorname{gp}(\\mathbf{W})$.",
+   "group": "A",
+   "explain": "A stack of rank d is guessed with probability at most g^(-d), and a vector of its row space is at least as easy to guess as the stack."
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma B.2'",
+   "name": "Generic bound",
+   "statement": "$E$ is a polynomial of degree two in $u$ with nonnegative coefficients. If $E(2) \\le 2^{-\\lambda}$ and $E(2^{\\lambda+1}) - E(2) \\le 1 - 2^{-\\lambda}$, then $E(2Q + 2) \\le (Q+1)/2^\\lambda$ for every integer $0 \\le Q < 2^\\lambda$.",
+   "proof": "Every term of $E(u)$ is a polynomial in $u$ with nonnegative coefficients, as $L \\ge 1$, of degree two for $N_{\\mathrm{cmp}}(u)$ and at most two otherwise. So $Q \\mapsto E(2Q+2) - (Q+1)/2^\\lambda$ is convex; by the premises it is at most $0$ at $Q = 0$ and at $Q = 2^\\lambda - 1$, where it is $E(2^{\\lambda+1}) - 1$, hence in between.",
+   "explain": "The budget E(u) is a quadratic in u with nonnegative coefficients. If E(2) ≤ 2^(−λ) and E(2^(λ+1)) − E(2) ≤ 1 − 2^(−λ), then E(2Q+2) ≤ (Q+1)/2^λ for every Q < 2^λ. Proof idea: Convexity: the difference is at most zero at both ends of the range, hence in between. Note: E has pieces that no lemma of the paper draws on, among them the “+L” of its first term, most of its fifth term, and its sixth term. The paper says its bounds fit “with terms of E(u) to spare”, because E is the bound of the Lean statement.",
+   "group": "G",
+   "id": "new:ledger"
+  },
+  {
+   "kind": "theorem",
+   "label": "Theorem 5.6'",
+   "name": "Correctness",
+   "statement": "For every admissible choice of evaluation points, Praxis as specified in Appendix A is correct with error $2/q$ (Definition 3.5). For a witness $w$, decryption fails exactly when $\\xi_{\\mathrm{key}}(w) = 0$.",
+   "proof": "Fix a witness $w$ and a ciphertext $ct$ of $\\mathsf{Enc}(\\mathsf{pp}, m)$, for any coins, and let $\\psi := y(w) \\sum_{c \\in C} \\gamma_c\\, \\xi_c(w)$ with $y(w) := y^\\top w$. If $\\xi_{\\mathrm{key}}(w) = 0$, $\\mathsf{Dec}$ returns $\\bot$ in line (2). Otherwise, in $\\mathsf{Comb}(ct_2)$ the basis $\\Omega$ cancels and the summed factors pair to the sum over the cells $c = (k_1, \\mathrm{leg})$ and $i, j$ of $\\xi_c(w)\\, w_i w_j$ times $F^{k_1}_i H^{\\mathrm{leg}}_j$ (Appendix A), whose terms $\\pm \\gamma_c\\, y(w)\\, A_w(\\tau)$ cancel: the search term $r(w)\\, \\psi$, the QAP term $\\sum_c \\xi_c(w)\\, \\gamma_c\\, A_w(\\tau)\\, B_w(\\tau)$, and the masks' term $y(w) \\sum_c \\xi_c(w)\\, \\pi_{k_1} w^\\top \\vartheta_{\\mathrm{leg}}$. The first identity of Definition 4.6 for $w$ serves the key copy, where $\\gamma_{c_{\\mathrm{key}}} L_\\rho(\\tau) = \\kappa$, and the second the others; the powers suffice, as $h_{\\mathrm{key}}, h_{\\mathrm{oth}} \\in \\mathbb{F}_q^{<D}[X]$ with $D \\le J\\Delta$ and $R_w$ is allowed (Lemma 4.7), and each sum over the chunks encodes what one pairing with the whole polynomial would (Appendix A). So the first four sums of line (b), with their signs, encode $\\xi_{\\mathrm{key}}(w)\\, \\kappa + r(w)\\, \\psi$ plus the masks' term. The tie polynomials of the honest stack of $w$, which satisfies the ties (Section 5.1), are $w$ times the numerators of $x^0_1$, $x^0_2$, $x^0_3$; as $w_0 = 1$, the divisions are exact, and the bases of $\\mathsf{B}_w$ suffice by the degrees of the $x^\\iota_a$. By the mask identity, the pairing of $\\mathsf{Y}_w$ with $\\mathsf{B}_w$ encodes the masks' term, so $\\Lambda = [\\xi_{\\mathrm{key}}(w)\\, \\kappa + r(w)\\, \\psi]_T$. Also $\\Psi$ encodes $\\sum_c \\xi_c(w)\\, \\pi_{k_1} y(w)\\, s_{\\mathrm{leg}} = \\psi$, and $(\\Lambda^\\alpha, \\Psi^\\alpha) = \\alpha \\cdot (\\Lambda, \\Psi)$, as $\\mathsf{Comb}$ is linear in $ct_2$ and $ct_2^\\alpha = \\alpha \\cdot ct_2$.\n\nSo, as $\\mathsf{K}^\\alpha = [\\alpha \\kappa]_T$, line (8) gives $\\Lambda' = t_0 \\cdot \\Psi^\\alpha$ for $t_0 := r(w) - c_w$, and $|t_0| \\le B$ by Lemma 5.5'. If $\\Psi^\\alpha \\ne 0$, it has order $q > 2B + 1$, so line (9) sets $t = t_0$. If $\\Psi^\\alpha = 0$, line (9) sets $t = 0$, and $\\Psi = 0$, as $\\alpha \\ne 0$. In both cases $K = \\xi_{\\mathrm{key}}(w)^{-1} \\cdot ( \\Lambda - r(w) \\cdot \\Psi ) = [\\kappa]_T$, and $\\mathsf{Dec}$ returns $\\tilde{m} \\oplus H_{\\mathsf{key}}([\\kappa]_T) = m$.\n\nFinally, by Definition 5.1, as $w_0 = 1$, $z(w) - 1$ is linear, without constant term, in the coefficients of the $M_{i,j}$. So $\\xi_{\\mathrm{key}}(w) = U_0(w)$, a coefficient of $z(w) \\cdot \\sigma^{n/2-1}(z(w))$, is a polynomial of degree at most two in these coefficients, with value $1$ when all are zero. They are uniform and independent over the choice of $H_{\\mathsf{seed}}$, and independent of $w$, which is fixed before $H_{\\mathsf{seed}}$ (Definition 3.5), so $\\xi_{\\mathrm{key}}(w) = 0$ with probability at most $2/q$ by the Schwartz--Zippel lemma \\cite{Sch80,Zip79}.",
+   "explain": "Praxis is correct with error 2/q: decryption with a witness w returns the message unless ξ_(key)(w) = 0. Proof idea: By the honest combination the search target is (r(w) − c_w)·Ψ^α, which lies in the search range; Schwartz–Zippel bounds Pr[ξ_(key)(w) = 0].",
+   "group": "C",
+   "id": "new:correct"
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma 5.5'",
+   "name": "Search range",
+   "statement": "Let $w \\in \\{0,1\\}^{N+1}$ with $w_0 = 1$, and let $r \\leftarrow \\mathcal{D}_g$ and $c_w$ be the center of Section 5.2. Then $|r(w) - c_w| \\le B$ for every $r$ in the support, and the expectation of $(r(w) - c_w)^2$ is at most $\\bigl( g \\sqrt{(N+4)/48} + 3/2 \\bigr)^2$.",
+   "proof": "Let $a := \\lceil N(g+1)/2 \\rceil$, $\\Sigma := \\sum_{i \\in [N]} r_i$, and $X := r_\\star + \\sum_{i \\in [N]} (w_i - 1/2)\\, r_i$, a sum of $N + 1$ independent terms. Each of $r_\\star, r_1, \\dots, r_N$ has mean $(g+3)/2$, lies within $(g-1)/2$ of it, and has variance $(g^2-1)/12$. So, as $|w_i - 1/2| = 1/2$, $X$ has mean $\\mu := \\frac{g+3}{2} (1 + \\operatorname{wt}(w) - N/2)$ and variance $(N+4)(g^2-1)/48$, and $|X - \\mu| \\le (N+2)(g-1)/4$. As $w_0 = 1$, $r(w) = r_0 + \\sum_{i \\in [N]} w_i r_i = a + X + \\Sigma/2 - \\lfloor \\Sigma/2 \\rfloor$, and $c_w = \\lfloor a + \\mu \\rfloor$, so $r(w) - c_w = (X - \\mu) + \\theta$ for the sum $\\theta \\in [0, 3/2)$ of the rounding errors $\\Sigma/2 - \\lfloor \\Sigma/2 \\rfloor \\le 1/2$ and $a + \\mu - \\lfloor a + \\mu \\rfloor < 1$. So $|r(w) - c_w| \\le (N+2)(g-1)/4 + 3/2 \\le (N+1)(g-1)/2 + (N+1)(g+3)/2 = B$, and by Minkowski's inequality in $L^2$ the square root of the expectation of $(r(w) - c_w)^2$ is at most $\\sqrt{(N+4)(g^2-1)/48} + 3/2 \\le g \\sqrt{(N+4)/48} + 3/2$.",
+   "explain": "|r(w) − c_w| ≤ B for every r in the support of the sampler, and E[(r(w) − c_w)²] ≤ (g·√((N+4)/48) + 3/2)² for the centered sampler. Proof idea: r(w) − c_w is a sum of independent centered terms plus two rounding errors.",
+   "group": "C",
+   "id": "new:range"
+  },
+  {
+   "kind": "lemma",
+   "label": "Lemma B.8'",
+   "name": "Packing a short multiple",
+   "statement": "Let the parameters satisfy (P3). If $x$ is a short multiple of a kernel vector, then $\\hat x \\in R^\\ell$, with the $\\hat x_j$ of Definition 5.1 over $\\mathbb{Z}$, solves MSIS for the matrix $A$ of the columns $1, \\dots, \\ell$ of $M$ (Definition 3.3): $0 < \\|\\hat x\\|_\\infty \\le \\beta$ and $A \\hat x = 0 \\bmod q$.",
+   "proof": "Modulo $q$, $x$ is a nonzero multiple of a kernel vector $v$; as $z$ is linear and $z(v) = 0$, $x \\not\\equiv 0$ and $\\varphi_e(x) \\equiv 0 \\bmod q$ for every $e$. As $\\varphi_0(x) = x_0$ and $|x_0| \\le \\beta < q$ by (P3), $x_0 = 0$. So the columns $1, \\dots, \\ell$ of $M$ map $\\hat x$ to zero modulo $q$, by the criterion of Definition 5.1 for vectors with entry $0$ zero. The coefficients of $\\hat x$ are $x_1, \\dots, x_N$ and zeros, so $\\|\\hat x\\|_\\infty = \\|x\\|_\\infty \\le \\beta$, and it is positive, as $x \\not\\equiv 0$ and $x_0 = 0$.",
+   "explain": "Clause (c) of the heavy stacks lemma, alone: a short multiple of a kernel vector is an MSIS solution.",
+   "group": "L",
+   "id": "new:pack"
+  }
+ ],
+ "edges": [
+  {
+   "from": "blob:sampler-search",
+   "to": "new:gp-rank",
+   "kind": "background"
+  },
+  {
+   "from": "blob:stacks-gp",
+   "to": "new:gp-rank",
+   "kind": "background"
+  },
+  {
+   "from": "blob:bound-e",
+   "to": "new:ledger",
+   "kind": "background"
+  },
+  {
+   "from": "ext:sz",
+   "to": "new:correct",
+   "kind": "uses",
+   "demand": "ξ_(key)(w) is a polynomial of degree at most two in the uniform coefficients of M with value 1 at zero, so it vanishes with probability at most 2/q.",
+   "clause": "as cited",
+   "where": "Proof of Theorem 5.6."
+  },
+  {
+   "from": "blob:ggm",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "blob:rom",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "blob:we",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "blob:sampler-search",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "blob:qap",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "blob:forms-weights",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "blob:copies-ties",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "blob:enc",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "blob:dec",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "blob:bqs",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "lem:qap",
+   "to": "new:correct",
+   "kind": "uses",
+   "demand": "For the moment matrix ww^⊤ of a witness, both division identities hold with quotients of degree below D and an allowed remainder. So the published quotient and remainder powers are enough to cancel the QAP term.",
+   "clause": "(a) ⇒ (b), (c), with the degree bounds",
+   "where": "Proof of 5.4."
+  },
+  {
+   "from": "blob:cancellation-mask",
+   "to": "new:correct",
+   "kind": "background"
+  },
+  {
+   "from": "blob:sampler-search",
+   "to": "new:range",
+   "kind": "background"
+  },
+  {
+   "from": "new:range",
+   "to": "new:correct",
+   "kind": "uses",
+   "demand": "|r(w) − c_w| ≤ B, so the bounded search finds the integer.",
+   "clause": "first claim only",
+   "where": "Proof of 5.6.",
+   "slack": "The second-moment bound is not used here. It is used only by Proposition 5.7(d)."
+  },
+  {
+   "from": "blob:msis",
+   "to": "new:pack",
+   "kind": "background"
+  },
+  {
+   "from": "blob:forms-weights",
+   "to": "new:pack",
+   "kind": "background"
+  },
+  {
+   "from": "blob:kernel-short",
+   "to": "new:pack",
+   "kind": "background"
+  },
+  {
+   "from": "blob:admissibility",
+   "to": "new:pack",
+   "kind": "background"
+  }
+ ],
+ "discharge": [
+  {
+   "edge": [
+    "lem:ledger",
+    "thm:extraction"
+   ],
+   "by": [
+    "new:ledger"
+   ],
+   "argument": "The second sentence of Lemma B.2' is the demand: its two premises are admissibility condition (P5) word for word, and its conclusion is E(2Q+2) <= (Q+1)/2^lambda for every integer 0 <= Q < 2^lambda."
+  },
+  {
+   "edge": [
+    "thm:correct",
+    "prop:efficiency"
+   ],
+   "by": [
+    "new:correct"
+   ],
+   "argument": "Theorem 5.6' has the statement of Theorem 5.6 word for word, and the demanded fact is shown in the second paragraph of its proof: on a ciphertext of Enc with xi_key(w) != 0 the search target is Lambda' = (r(w) - c_w) * Psi^alpha with |r(w) - c_w| <= B, so line (9) returns r(w) - c_w if Psi^alpha != 0 and 0 if Psi^alpha = 0. The same clause of the proof carried this demand in the base graph."
+  },
+  {
+   "edge": [
+    "lem:range",
+    "prop:efficiency"
+   ],
+   "by": [
+    "new:range"
+   ],
+   "argument": "Proposition 5.7 is stated for Praxis as specified in Appendix A, whose Enc draws r from the centered sampler D_g and whose Dec uses the center c_w for D_g. For exactly this r and c_w, Lemma 5.5' states the bound E[(r(w) - c_w)^2] <= (g sqrt((N+4)/48) + 3/2)^2 with the same constants as the second case of the base lemma. Jensen's inequality then gives E sqrt|r(w) - c_w| <= (g sqrt((N+4)/48) + 3/2)^(1/2) = O(sqrt(g) N^(1/4)), the expected search of the demand. The dropped case (independent entries, Section 5.1) is not the scheme of Appendix A."
+  },
+  {
+   "edge": [
+    "lem:heavy",
+    "lem:reduction"
+   ],
+   "by": [
+    "new:gp-rank",
+    "lem:inverse",
+    "new:pack"
+   ],
+   "argument": "(a) A good mark's stack W is heavy (App. B.4), that is, gp(W) > θ (Definition 4.4). Lemma 4.5(a) states gp(W) ≤ g^(−rank W) for every stack. If rank W ≥ 4 then gp(W) ≤ g^(−4), as g ≥ 1, and g^(−4) < θ is one of the conditions (P3) of admissible parameters (Sec. 5.4); so W would be light. Hence rank W ≤ 3. (b) The kernel vector v found lies in the row space of the heavy mark stack W, so Lemma 4.5(b) gives gp(v^⊤) ≥ gp(W) > θ. A kernel vector is nonzero with z(v) = 0 (App. B.3), and z(v) = 0 means φ_e(v) = 0 for every e, with φ_0(v) = v_0 (Definition 5.1); so v_0 = 0. (P3) is the conditions (I1) to (I6) of Lemma B.7, whose statement then gives a short multiple of v. (c) Lemma B.8' states, under (P3), that for a short multiple x of a kernel vector, x̂ solves MSIS for the columns 1, …, ℓ of M, with 0 < ‖x̂‖_∞ ≤ β and A·x̂ = 0 mod q: this is clause (c) of Lemma B.8 word for word."
+  },
+  {
+   "edge": [
+    "lem:heavy",
+    "lem:extractor"
+   ],
+   "by": [
+    "new:gp-rank"
+   ],
+   "argument": "A good mark's stack W is heavy (App. B.4), that is, gp(W) > θ (Definition 4.4). Lemma 4.5(a) states gp(W) ≤ g^(−rank W) for every stack. If rank W ≥ 4 then gp(W) ≤ g^(−4), as g ≥ 1, and g^(−4) < θ is one of the conditions (P3) of admissible parameters (Sec. 5.4); so W would be light. Hence rank W ≤ 3."
+  }
+ ],
+ "replaces": {
+  "new:correct": "thm:correct"
+ }
 }
