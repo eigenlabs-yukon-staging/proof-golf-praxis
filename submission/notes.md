@@ -1,5 +1,15 @@
-# Starting submission: the paper as published
+# One first-mark lemma and the lifting step without unused counts, on top of the banked set
 
-This is the empty substitution. It removes nothing and adds nothing, so there is no obligation to judge, and the DAG it leaves is the paper's own. Its score is the line count of that DAG.
+Removed: lem:we-hiding, lem:rank-one, prop:hs-dimension, ext:hs, lem:gp-rank, lem:ledger, lem:range, lem:heavy, lem:inverse, ext:mink, lem:lift, lem:init, lem:charged, lem:names.
 
-To submit a cut, replace `substitution.json` with your substitution, run `python3 tools/pack.py` to rewrite `submission.json`, and rewrite this file to say what you removed, what you put in its place, and why each demand on an outgoing edge is still met.
+Added:
+
+- Lemma 4.5' (new:gp-rank): A stack of rank d is guessed with probability at most g^(-d), and a vector of its row space is at least as easy to guess as the stack.
+- Lemma B.2' (new:ledger): The budget E(u) is a quadratic in u with nonnegative coefficients. If E(2) ≤ 2^(−λ) and E(2^(λ+1)) − E(2) ≤ 1 − 2^(−λ), then E(2Q+2) ≤ (Q+1)/2^λ for every Q < 2^λ. Proof idea: Convexity: the difference is at most zero at both ends of the range, hence in between. Note: E has pieces that no lemma of the paper draws on, among them the “+L” of its first term, most of its fifth term, and its sixth term. The paper says its bounds fit “with terms of E(u) to spare”, because E is the bound of the Lean statement.
+- Lemma 5.5' (new:range): |r(w) − c_w| ≤ B for every r in the support of the sampler, and E[(r(w) − c_w)²] ≤ (g·√((N+4)/48) + 3/2)² for the centered sampler. Proof idea: r(w) − c_w is a sum of independent centered terms plus two rounding errors.
+- Lemma B.8' (new:pack): Clause (c) of the heavy stacks lemma, alone: a short multiple of a kernel vector is an MSIS solution.
+- Lemma B.7' (new:inverse): Under conditions (I1) to (I6) on (q, N, g, θ, β): every nonzero v in F_q^(N+1) with v_0 = 0 and gp(v^⊤) > θ has a short multiple, that is an integer vector x with ‖x‖_∞ ≤ β and x_0 = 0 whose reduction mod q is a nonzero multiple of v. Proof idea: Read the coordinates of v one at a time, keeping a saturated integer lattice of rank at most three whose reduction contains the prefix. Trimming, a lattice-point count that rules out wrap-around mod q, and a regularization step extend it; Minkowski's theorem in the last lattice gives the short multiple.
+- Lemma B.9' (new:lift): If 2β < q and 24β⁴ < q³, a deterministic algorithm LIFT returns, for a nonzero v with v_0 = 0, a short multiple of v, or ⊥ if there is none, in time polynomial in N and log q. Proof idea: Add one coordinate at a time, keeping a lattice of rank at most three that contains all bounded vectors; each extension is a few integer programs and Hermite normal forms in dimension at most four.
+- Lemma B.12' (new:firstmark): The first mark is charged (a collision with a guessed label, or a comparison that is not a good mark) with probability at most N_(cmp)(u)(θ + ε_f) + (C(L+3u, 2) + L + 3u)·ε_f. Proof idea: Shoup's simulation argument: a symbolic game answers by formal equality and agrees with the real run until two values collide. A bad collision has probability at most ε_f over the coins, or at most θ over the search vector when its stack is light. Union bound over the comparisons.
+
+Every edge that leaves the removed set is discharged in `discharge`; each new result carries its complete proof in its `proof` field.
