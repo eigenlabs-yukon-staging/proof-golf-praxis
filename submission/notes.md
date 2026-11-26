@@ -1,5 +1,8 @@
-# Starting submission: the paper as published
+# Slice, and the rank bound without its equality case
 
-This is the empty substitution. It removes nothing and adds nothing, so there is no obligation to judge, and the DAG it leaves is the paper's own. Its score is the line count of that DAG.
+Slice: Lemma 3.7, Lemma 4.3, Proposition C.1 and the cited result only C.1 uses are removed. None has an edge into a
+node that stays, so there is nothing to prove for them.
 
-To submit a cut, replace `substitution.json` with your substitution, run `python3 tools/pack.py` to rewrite `submission.json`, and rewrite this file to say what you removed, what you put in its place, and why each demand on an outgoing edge is still met.
+Trim: Lemma 4.5 is replaced by the same lemma without the equality case of part (a), which no proof uses. The proof is
+the argument for the inequality of (a) and for (b), in full. The replacement keeps every incoming edge of Lemma 4.5, and
+the one outgoing demand, from Lemma B.8, asks for exactly the inequality of (a) and for (b).
