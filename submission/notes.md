@@ -1,5 +1,8 @@
-# Starting submission: the paper as published
+# Slice: remove what no pinned theorem rests on
 
-This is the empty substitution. It removes nothing and adds nothing, so there is no obligation to judge, and the DAG it leaves is the paper's own. Its score is the line count of that DAG.
+Removed: Lemma 3.7 (extractability implies hiding), Lemma 4.3 (rank gap), Proposition C.1 (a dimension bound for an
+earlier construction) and the cited result that only Proposition C.1 uses.
 
-To submit a cut, replace `substitution.json` with your substitution, run `python3 tools/pack.py` to rewrite `submission.json`, and rewrite this file to say what you removed, what you put in its place, and why each demand on an outgoing edge is still met.
+None of the four has an edge into a node that stays, so the cut has no obligation: nothing is added and nothing needs
+to be proved. The four targets (Theorems 5.6 and 5.9, Corollaries 5.8 and 5.10) and everything they rest on are
+untouched.

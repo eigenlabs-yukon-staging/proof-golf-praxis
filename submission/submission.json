@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "title": "Baseline: the paper as published, nothing removed, nothing added",
+  "title": "Slice: remove the four nodes that no pinned theorem rests on",
   "claims": [
     "substitution.json is a VALID substitution of the Praxis paper DAG in the sense of rules.md: structural checks S1 to S8 pass on exactly these bytes, and the verifier lists no semantic obligation for it."
   ],
@@ -10,7 +10,7 @@
       "check": "paperdag_gate",
       "inputs": {
         "substitution": [
-          "eNpNjjsOgzAQBXtOsaIGBWPAMWWuEaVYs2uwxE/YpIly9/ApSDn7RqP9RACxnZYBQ1xDPOPMS0rYpn41PriwBjeNNxEnu2fQ8241QrDQVhBmVktCtDLThFprLKqSc0ZJwiqbF6oSrE2pVMVWiezOhSypOGtbvT9yjy3bu5FrCB3D8QKgh3k1vfMdUwLjFDo3trDwML3/D0jEdObObes9Xwdv0wVMLfsLyfmmw6U99egb/QC7gU46"
+          "eNo9jUtuhDAMhvecwsq6qGR4NVxjltUsDHYgKiRREmYqVb17A0jd/S9//ilAaBc2TGIA4dFzKAnnMu5jTCbtyTj7LsVbno0Y+RhNUrJUWhJWWtWEqOtKESqlsOlavjHWJHWvb03fSVZj2/cd615WH9zULTUnLLPXk3ZfzcQDBN7ckyEtDNrtAawjjtliyhK8sZbpaF0e5nFMEZw9SddlRn0WAGLlbXhxuRgydj76Kwpov0pn+Up8cH5YYklmYxvNBQLB3ymnooDHwUWiA3pqppnjvyMTpwXDfD59FL9/q5BhlA=="
         ]
       }
     }

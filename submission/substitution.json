@@ -1,9 +1,14 @@
 {
-  "format": "paper-dag-substitution/1",
-  "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
-  "title": "Baseline: the paper as published, nothing removed, nothing added",
-  "remove": [],
-  "add": [],
-  "edges": [],
-  "discharge": []
+ "format": "paper-dag-substitution/1",
+ "base": "c11e19f1da0f93daaf309da999a465e2ea3d1f7f24761e9b5776ef7108e435d4",
+ "title": "Slice: remove the four nodes that no pinned theorem rests on",
+ "remove": [
+  "lem:we-hiding",
+  "lem:rank-one",
+  "prop:hs-dimension",
+  "ext:hs"
+ ],
+ "add": [],
+ "edges": [],
+ "discharge": []
 }
