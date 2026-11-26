@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "name": "proof-golf-praxis",
+  "tracks": [
+    {
+      "name": "lines",
+      "description": "Substitute nodes of the Praxis paper DAG (ePrint 2026/2971) so that every demand on the outgoing edges is still met. The score is the number of lines of the resulting DAG; lower is better. The paper's own DAG scores 1087 lines.",
+      "category": "math",
+      "mode": "pareto",
+      "promotionMode": "manual",
+      "direction": "-",
+      "objectives": [
+        {
+          "name": "lines",
+          "direction": "-"
+        }
+      ],
+      "paretoPolicies": {
+        "scoring": {
+          "version": "paper-dag-lines-v1"
+        },
+        "validity": {
+          "version": "paper-dag-substitution-strict-v1"
+        }
+      },
+      "editablePaths": [
+        "submission"
+      ],
+      "submissionAdmission": {
+        "version": 1,
+        "submissionReferencesEnabled": false
+      },
+      "setupCommand": [
+        "llm-verifier",
+        "intake",
+        "--root",
+        ".",
+        "--out",
+        ".yukon/work/intake.json"
+      ],
+      "benchmarkCommand": [
+        "llm-verifier",
+        "finalize",
+        "--intake",
+        ".yukon/work/intake.json",
+        "--initial",
+        ".yukon/work/initial.json",
+        "--initial-review",
+        ".yukon/work/review.json",
+        "--score",
+        ".yukon/score.json",
+        "--dossier",
+        ".yukon/dossier.json"
+      ],
+      "scorePath": ".yukon/score.json",
+      "maxSubmissionBytes": 786432,
+      "runner": {
+        "provider": "github-actions",
+        "workflow": "benchmark.yml",
+        "scoreArtifactName": "benchmark-score",
+        "maxConcurrentWorkflows": 2
+      }
+    }
+  ]
+}
