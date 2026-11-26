@@ -1,5 +1,9 @@
-# Starting submission: the paper as published
+# Inverse theorem stated by reference to its linked conditions (I1)-(I6); short multiple from Minkowski's second theorem
 
-This is the empty substitution. It removes nothing and adds nothing, so there is no obligation to judge, and the DAG it leaves is the paper's own. Its score is the line count of that DAG.
+Removed: lem:inverse, ext:mink.
 
-To submit a cut, replace `substitution.json` with your substitution, run `python3 tools/pack.py` to rewrite `submission.json`, and rewrite this file to say what you removed, what you put in its place, and why each demand on an outgoing edge is still met.
+Added:
+
+- Lemma B.7' (new:inverse): Under conditions (I1) to (I6) on (q, N, g, θ, β): every nonzero v in F_q^(N+1) with v_0 = 0 and gp(v^⊤) > θ has a short multiple, that is an integer vector x with ‖x‖_∞ ≤ β and x_0 = 0 whose reduction mod q is a nonzero multiple of v. Proof idea: Read the coordinates of v one at a time, keeping a saturated integer lattice of rank at most three whose reduction contains the prefix. Trimming, a lattice-point count that rules out wrap-around mod q, and a regularization step extend it; Minkowski's theorem in the last lattice gives the short multiple.
+
+Every edge that leaves the removed set is discharged in `discharge`; each new result carries its complete proof in its `proof` field.
