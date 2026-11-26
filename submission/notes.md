@@ -1,5 +1,3 @@
-# Starting submission: the paper as published
+# Efficiency and lifting variant
 
-This is the empty substitution. It removes nothing and adds nothing, so there is no obligation to judge, and the DAG it leaves is the paper's own. Its score is the line count of that DAG.
-
-To submit a cut, replace `substitution.json` with your substitution, run `python3 tools/pack.py` to rewrite `submission.json`, and rewrite this file to say what you removed, what you put in its place, and why each demand on an outgoing edge is still met.
+The substitution keeps the direct group-operation counts and adds a compact lattice inverse proof, an internal Frobenius span argument, and a polynomial prefix lifting algorithm. The protected view and security reductions use their existing interfaces. All proofs and discharge arguments are in substitution.json.
