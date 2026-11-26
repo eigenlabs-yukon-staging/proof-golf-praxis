@@ -162,6 +162,48 @@
     }
   },
   {
+    "id": "fail-s6-proof-defers-to-the-paper",
+    "check": "paperdag_gate",
+    "inputs": {
+      "substitution": [
+        "eNq1VNtuEzEQfc9XjFaVALEJ2SZN2CAeuKgSUh8q8dhUlS/jrKnXDraXNKry74y9m9IKhECIh2x2bmeOz4z3fgSFcr5lsVhBsWVb9GPJNuPQ8RB17KJ29lVVlJTGWcCUJKoKq1pVkk1VPZOMqdm0lqyuazZfnOEpspms1FKdzpeLCmt+tlwuUC2r6Wucz87kPIMRtslo5/oudh5X4CyCwbZl4HFrmEAJfA/5rXFGooeIdzEXe2zdt1R9NQIoqGjVMKOKEVynKJNyCN3TDwqdzEINfQbwFm3GovittjkjNx98hnE0j+gNbsvaTPpz9J0gPzOgniSEyGKPTVmfLMQGAe9IVJ2c4BR8RKWtTrLCbLIo4WS9vvRX63UJ/Bm8BQ7r9Q7lBumfhtIEdX/OtDmQWV7Tw6SA8kxUp/Dy+DqH5+pmSra6qV6cTAYuW++cSjzeBdA9lTzfEnY6NtkWzhJjGwMw+aULEeWxmEgbpm0uP57xDVgXIbFCemgRJiQ5HAbZE+nwRHjlXZsAaGwr7gfg6P5sGl0gtN4lqV3v/OC0DcScRZAus5G4RStpeUg5iRF9q2mPdg0SSZ/PGJnfYISvHfo9OCE6T6e1sgStEkKZk1wXt10EruNRAGFY1+87CyA0STMECNtn/2XSN430Im/t+0k17QUpf1KAG8dXO/xLCTgTtxvvOrJ+A8tTwvj/YId9y53RYrxJi/9PHYYtkTqIJk3kyaak3Rkcjy902dvC+RXt0Bi9dz6BZSgK8P2Pol8RepRKLbvjvXz45AQ6FTxc2YdtHh2+A5Q0gs0="
+      ]
+    },
+    "expected": {
+      "passed": false,
+      "lines": -1,
+      "first_failed_check": "S6"
+    }
+  },
+  {
+    "id": "fail-s6-proof-names-the-removed-node",
+    "check": "paperdag_gate",
+    "inputs": {
+      "substitution": [
+        "eNq1VG1r2zAQ/p5fcZjCNuZkcZMmc8Y+7IXCYB8K27emlJN1ikVly5PkpaH0v++kOG3DxtgYA9vRvejR3fOccjeCTFnXYMhWkHXYkRtL3Ix9L3zQoQ/atq+KLOc0gZ5iUlUUVJSqkDhV5Uwiqtm0lFiWJc4XZ3RKOJOFWqrT+XJRUCnOlssFqWUxfU3z2ZmcJzDGNgntXN+G3tEKbEtgqGkQHHUGK5IgdpBWtTWSHAS6DWmzo8Z+j7svRwAZb1rVaFQ2gqsYRSmH0B2/kOloZmo4ZwBvqE1YHL/RbcpIhw8+g4LMk/IGd4tNKvpLcH3FfjSgjhJ8wLDH5qxPLYSagG6ZVB2dYBV8JKVbHWmF2WSRw8l6feEu1+scxDN4CwLW6y3JDfEvi1J7dXeO2tyzmV/xx8SAclgVp/DysJzDc3U9ZVtdFy9OJkMtnbNWxTq+1toDP58Tu+8nxTSHbW09AbpNnwrDrjOaPGytk8DzsF/U5OiAxl0Y1G3Ee3do+g20NkAsk/ijKz9hDeB+0CF24Y+UUM42EYB1XAk3AAf7Z/L0ntH2LsnH7Z0frG49s4wBpE3VSOqolTxNTKWkQK7RPFjbmrhIl/QI3DUF+NaT24Gtqt55YLgctIoIeUqyfej6AEKHAwGVwX5/AdBDpQPJIbCNNEX/RSQ8avxI9J6Q/CcGhLFitaW/pEBgdbNxtmfrN7AiJoz/D7bfNcIaXY038Sb80wnDlEjtqzoqcjQpcXYGx9Mbnu/tyroVz9CYnLMugiUoDojd46ZfFfQk9TD6R/9BnruChzv8MM2j+x+CvYgm"
+      ]
+    },
+    "expected": {
+      "passed": false,
+      "lines": -1,
+      "first_failed_check": "S6"
+    }
+  },
+  {
+    "id": "fail-s6-proof-is-a-sketch",
+    "check": "paperdag_gate",
+    "inputs": {
+      "substitution": [
+        "eNq1VFtr2zAUfs+vOJjCNuZkcZMms8cedqEw2ENhj00pR9JRLCpbniSvDaX/vUeO0wsbY2MMElvn9p1P5+LbCWTa+QZjVkHWYUd+qnA7Db0I0cQ+Gte+KbKc3QQGSk6yKKgodaFwrsuFQtSLeamwLEtcrk7omHChCr3Wx8v1qqBSnKzXK9LrYv6WlosTtRzAGNsOaKfmJvaeKnAtgaWmQfDUWZSkQOxgONXOKvIQ6SYOwZ4a9yNFn08AMg6qarQ6m8BFsqJSo+mW/5CZJGZ6zDOCN9QOWGy/Mu3gMSQfdRYF2Sf0RnWLzUD6W/S9ZD1a0M8cQsS4x2avLy3EmoBuuKgmKcFp+EzatCaVFRazVQ5Hm82ZP99schAv4D0I2GyuSW2J39yUOujbUzT2jsX8gh82GbRHWRzD68NxCS/15ZxlfVm8OpqNXDrvnE48ztIBwhVFWVeJDrZcWxdrCEZRyEG6pkNP/CatjTRMlbXJS7pW2l7RAZODLZo2oX44XP0dtC5CIkv8MDLMuBNwN3Yj3SU864f2rkkA3M1K+BE4uj9rUh8Yba9SnG6v/ORMG7jWGEG5gY2ijpg+F1nwOZJvDI/XdU1M0g9diei3FOF7T34HTsreh3TjHIxOCPng5PrY9RGEiYcCSIv9fg0wgDSR1GhgbE+P1ebf12GYP86K+b4g+U8VENaJ6pr+sgQC5dXWu56l38CK5DD9P9hh1whnjZxu0z78U4ZxSpQJsk4deTYpaXZGxdM9z/eydL7iGZqS984nsAGKDWL3GPQrQk9cOWV/WNeHL1HgW8HDJj9M8+TuHn+0i2c="
+      ]
+    },
+    "expected": {
+      "passed": false,
+      "lines": -1,
+      "first_failed_check": "S6"
+    }
+  },
+  {
     "id": "fail-s7-cycle",
     "check": "paperdag_gate",
     "inputs": {

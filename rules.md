@@ -54,7 +54,7 @@ Structural checks (code decides, no judgment):
 - S3 A target may be removed only if `replaces` maps exactly one added result to it and `norm(statement)` is identical. The added node then becomes the target.
 - S4 Every edge of the base with `from` in `remove` and `to` kept (an obligation) appears exactly once in `discharge`, with `by` a non-empty list of added or kept nodes and a non-empty `argument`. No discharge for a non-obligation.
 - S5 Every edge in `edges` ends at an added node and starts at an added node, a kept node or a blob; `uses` edges carry a non-empty `demand`. Edges into removed nodes disappear with them.
-- S6 Added results have non-empty `statement` and `proof`; added externals have `ref.citation`, `ref.locator` and `ref.quote`, and no entry of `import_denylist` occurs (case-insensitive substring) in `citation`, `url` or `quote`.
+- S6 Added results have non-empty `statement` and `proof`; added externals have `ref.citation`, `ref.locator` and `ref.quote`, and no entry of `import_denylist` occurs (case-insensitive substring) in `citation`, `url` or `quote`. Full proofs only: the `proof` of an added result must be complete in its own words. Code refuses a proof that names a removed node (by id or printed label), that defers to the paper, to the original or a removed proof or to the reader ("as in the paper", "the original proof", "same argument as", "unchanged", "details are omitted", "left to the reader"), or that announces a sketch, an outline or an idea. Passing this floor proves nothing; the reviewer still judges the proof.
 - S7 The resulting graph (kept nodes and edges, added nodes and edges, plus, for each discharge, an edge from each `by` node to the consumer carrying the original demand) is acyclic, and every target is present.
 - S8 The score of the resulting graph is computed. Unreferenced added nodes still count.
 
@@ -82,6 +82,7 @@ A submission that is not VALID receives no score. It is not scored as the baseli
 
 ## What does not count
 
+- Anything short of a full proof. An idea, a plan, a sketch, an outline, a list of steps without the steps, or a proof that points back to the paper's proof, to the proof it replaces, to a removed node, to another node's proof or to the reader is not a proof. Every step must be written out in the `proof` field so that a reader can check it from that text, the demands on the node's incoming edges and the blobs linked to it. A shorter proof must be a different complete proof, never the same proof with steps left out.
 - A substitution over any DAG other than the protected one, or with a `base` other than the hash above.
 - An added external that cites the paper itself (arXiv 2611.28552, ePrint 2026/2971, by title) or its own Lean development (`praxis-lean`), under any spelling. S6 refuses the listed spellings; the reviewer refuses the rest.
 - An added external whose quote is not what the source says, whose locator does not lead to it, or whose statement says more than the quote. The reviewer cannot open sources; a citation it cannot recognise as stating the quoted result is rejected.

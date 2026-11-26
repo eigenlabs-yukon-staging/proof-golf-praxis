@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 """paper-dag/1: lint, score, hash and verify a substitution. Standard library only.
 
-STAND-IN. This file was written from the contract in the paper-dag skill's
-references/format.md ("Verifier contract") because the skill's own
-scripts/paperdag.py did not exist when the challenge package was prepared.
-It is replaced by that file, byte for byte, as soon as it exists; until then it
-is what the protected checker runs. It implements S1 to S8 exactly as format.md
-words them and lists the semantic obligations; it judges none of them.
+The reference verifier of the paper-dag skill. It implements the structural checks S1 to S8 of
+references/format.md and lists the semantic obligations; it judges none of them. S6 includes the
+full-proofs floor: a proof that names a removed node or uses deferral or sketch wording is refused.
 
   python3 paperdag.py lint dag.json
   python3 paperdag.py score dag.json
@@ -16,9 +13,49 @@ words them and lists the semantic obligations; it judges none of them.
 import hashlib
 import json
 import math
+import re
 import sys
 
 RESULTS = ("theorem", "lemma", "proposition", "corollary")
+
+# The full-proofs floor of S6. A proof must be complete in its own words: wording that defers to the paper, to
+# the original or a removed proof, or to the reader, and wording that announces a sketch or an idea, is refused
+# by code before any reviewer reads it. Passing this floor proves nothing: the reviewer still judges the proof.
+DEFERRAL = [
+    r"\b(?:the|this|that|their) (?:paper|article|preprint|manuscript|source)\b",
+    r"\b(?:original|published|authors'?|author's|base|previous|former|old|replaced|removed|deleted|existing) "
+    r"(?:proof|proofs|argument|arguments|derivation|text|version|paper|lemma|node|nodes|dag)\b",
+    r"\b(?:same|identical) (?:proof|argument|reasoning|derivation) as\b",
+    r"\b(?:proof|argument|derivation|reasoning) (?:is|remains|stays|goes|carries over) (?:the same|unchanged|as before|identical|verbatim)\b",
+    r"\bas (?:before|in the original|originally|in the base)\b",
+    r"\b(?:unchanged|verbatim|mutatis mutandis)\b",
+    r"\bpraxis-lean\b|\beprint\b|\barxiv\b",
+    r"\bleft (?:to|for) the reader\b|\bleft as an exercise\b|\bexercise for the reader\b",
+    r"\b(?:proof|proofs|details?|verification|calculation|computation|argument|rest|remainder|remaining cases?|other cases?) "
+    r"(?:is |are |was |were )?(?:omitted|left out|skipped|routine|not given|not shown)\b",
+    r"\bwe (?:omit|skip|leave|do not give|do not prove)\b|\bomitted\b",
+    r"\b(?:todo|tbd|to be completed|to be filled|to be written|placeholder)\b",
+    r"\b(?:proof )?(?:sketch|outline)\b|\bsketch of\b|\b(?:the|main|key|proof) idea\b|\bidea of (?:the )?proof\b|^\s*idea\b",
+    r"\bin (?:brief|outline)\b|\broughly speaking\b|\bheuristically\b|\bintuitively\b",
+]
+_DEFERRAL = [re.compile(p, re.I) for p in DEFERRAL]
+
+
+def deferral(proof, removed_nodes):
+    """The first wording in `proof` that the full-proofs floor refuses, or "" if there is none."""
+    text = norm(proof)
+    for rx in _DEFERRAL:
+        m = rx.search(text)
+        if m:
+            return m.group(0)
+    for n in removed_nodes:
+        for name in (n.get("id"), n.get("label")):
+            if isinstance(name, str) and len(name) >= 3:
+                m = re.search(r"(?<![\w:.-])" + re.escape(name) + r"(?![\w'\u2032\u2019:-]|\.\d)", text, re.I)
+                if m:
+                    return m.group(0)
+    return ""
+
 SUB_FORMAT = "paper-dag-substitution/1"
 DAG_FORMAT = "paper-dag/1"
 
@@ -238,6 +275,11 @@ def _plan(dag, sub):
         if n.get("kind") in RESULTS:
             if not _text(n.get("statement")) or not _text(n.get("proof")):
                 err("S6", f"added result {i} needs a non-empty statement and proof")
+            else:
+                bad = deferral(n.get("proof"), [nodes[r] for r in (remove if isinstance(remove, list) else []) if isinstance(r, str) and r in nodes])
+                if bad:
+                    err("S6", f"added result {i}: the proof must be complete in its own words, and {bad!r} defers to "
+                              "the paper, to a removed or original proof or to the reader, or announces a sketch")
         else:
             ref = n.get("ref") if isinstance(n.get("ref"), dict) else {}
             if not _text(n.get("statement")):
